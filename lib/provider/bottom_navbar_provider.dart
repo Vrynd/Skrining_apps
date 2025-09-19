@@ -6,9 +6,7 @@ class BottomNavBarProvider with ChangeNotifier {
   int get selectedIndex => _selectedIndex;
 
   void setSelectedIndex(int index) {
-    if (_selectedIndex != index) {
-      _selectedIndex = index;
-      notifyListeners();
-    }
+    _selectedIndex = index;
+    notifyListeners();
   }
 }
