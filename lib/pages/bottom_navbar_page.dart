@@ -12,7 +12,6 @@ class BottomNavBarPage extends StatelessWidget {
     return Consumer<BottomNavBarProvider>(
       builder: (context, value, child) {
         return Scaffold(
-          appBar: AppBar(title: Text("Selamat Datang")),
           body: IndexedStack(
             index: value.selectedIndex,
             children: [
