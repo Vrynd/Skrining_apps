@@ -13,7 +13,6 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final _fullNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -47,14 +46,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            AuthTextField(
-                              label: 'Nama Lengkap',
-                              hint: 'Masukkan nama lengkap Anda',
-                              prefixIcon: Icons.person_outline,
-                              controller: _fullNameController,
-                              keyboardType: TextInputType.name,
-                            ),
-                            const SizedBox(height: 20),
                             AuthTextField(
                               label: 'Email',
                               hint: 'Masukkan email Anda',
