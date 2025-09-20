@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skrining_apps/firebase_options.dart';
 import 'package:skrining_apps/screens/auth/login_screen.dart';
+import 'package:skrining_apps/screens/auth/register_screen.dart';
 import 'package:skrining_apps/screens/routes/route_screen.dart';
 import 'package:skrining_apps/themes/theme_apps.dart';
 
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
       initialRoute: RouteScreen.login.name,
       routes: {
         RouteScreen.login.name: (context) => const LoginScreen(),
+        RouteScreen.register.name: (context) => const RegisterScreen(),
         RouteScreen.home.name: (context) => const LoginScreen(),
       },
     );
