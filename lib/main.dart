@@ -6,10 +6,13 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skrining_apps/firebase_options.dart';
 import 'package:skrining_apps/provider/firebase_auth_provider.dart';
+import 'package:skrining_apps/provider/shared_prefrences_provider.dart';
 import 'package:skrining_apps/screens/auth/login_screen.dart';
 import 'package:skrining_apps/screens/auth/register_screen.dart';
+import 'package:skrining_apps/screens/main/home_screen.dart';
 import 'package:skrining_apps/screens/routes/route_screen.dart';
 import 'package:skrining_apps/service/firebase_auth_service.dart';
+import 'package:skrining_apps/service/shared_preferences_service.dart';
 import 'package:skrining_apps/themes/theme_apps.dart';
 
 void main() async {
@@ -36,7 +39,14 @@ void main() async {
           create: (context) =>
               FirebaseAuthProvider(context.read<FirebaseAuthService>()),
         ),
+        Provider(create: (context) => SharedPreferencesService(pref)),
+        ChangeNotifierProvider(
+          create: (context) => SharedPreferenceProvider(
+            context.read<SharedPreferencesService>(),
+          ),
+        ),
       ],
+      child: const MyApp(),
     ),
   );
 }
@@ -54,7 +64,7 @@ class MyApp extends StatelessWidget {
       routes: {
         RouteScreen.login.name: (context) => const LoginScreen(),
         RouteScreen.register.name: (context) => const RegisterScreen(),
-        RouteScreen.home.name: (context) => const LoginScreen(),
+        RouteScreen.home.name: (context) => const HomeScreen(),
       },
     );
   }

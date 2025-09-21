@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:skrining_apps/components/template/auth/auth_button.dart';
 import 'package:skrining_apps/components/template/auth/auth_card.dart';
 import 'package:skrining_apps/components/template/auth/auth_hero.dart';
 import 'package:skrining_apps/components/template/auth/auth_redirect.dart';
 import 'package:skrining_apps/components/template/auth/auth_text_field.dart';
+import 'package:skrining_apps/firebase_auth_status.dart';
+import 'package:skrining_apps/provider/firebase_auth_provider.dart';
+import 'package:skrining_apps/provider/shared_prefrences_provider.dart';
 import 'package:skrining_apps/screens/routes/route_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -64,7 +68,20 @@ class _LoginScreenState extends State<LoginScreen> {
                               keyboardType: TextInputType.visiblePassword,
                             ),
                             const SizedBox(height: 24),
-                            AuthButton(onPressed: () {}, textAction: 'Masuk'),
+                            Consumer<FirebaseAuthProvider>(
+                              builder: (context, value, child) {
+                                return switch (value.authStatus) {
+                                  FirebaseAuthStatus.authenticating =>
+                                    const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  _ => AuthButton(
+                                    onPressed: _tapToLogin,
+                                    textAction: 'Masuk',
+                                  ),
+                                };
+                              },
+                            ),
                             const SizedBox(height: 20),
                             Align(
                               alignment: Alignment.center,
@@ -88,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       AuthRedirect(
                         questionText: "Belum punya akun?",
                         actionText: "Daftar Disini",
-                        onTap: _goToSignUp,
+                        onTap: _goToRegister,
                       ),
                     ],
                   ),
@@ -101,7 +118,57 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _goToSignUp() {
+  @override
+  void initState() {
+    super.initState();
+    final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
+    final navigator = Navigator.of(context);
+    final isLogin = context.read<SharedPreferenceProvider>().isLogin;
+
+    Future.microtask(() async {
+      if (isLogin) {
+        await firebaseAuthProvider.updateProfile();
+        navigator.pushReplacementNamed(RouteScreen.home.name);
+      }
+    });
+  }
+
+  void _tapToLogin() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isNotEmpty && password.isNotEmpty) {
+      final sharedPreferenceProvider = context.read<SharedPreferenceProvider>();
+      final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
+      final navigator = Navigator.of(context);
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+      await firebaseAuthProvider.signInUser(email, password);
+      switch (firebaseAuthProvider.authStatus) {
+        case FirebaseAuthStatus.authenticated:
+          await sharedPreferenceProvider.login();
+          navigator.pushReplacementNamed(RouteScreen.home.name);
+        case _:
+          scaffoldMessenger.showSnackBar(
+            SnackBar(content: Text(firebaseAuthProvider.message ?? "")),
+          );
+      }
+    } else {
+      const message = "Fill the email and password correctly";
+
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+      scaffoldMessenger.showSnackBar(const SnackBar(content: Text(message)));
+    }
+  }
+
+  void _goToRegister() async {
     Navigator.pushNamed(context, RouteScreen.register.name);
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }
