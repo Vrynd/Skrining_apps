@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
     Future.microtask(() async {
       if (isLogin) {
         await firebaseAuthProvider.updateProfile();
-        navigator.pushReplacementNamed(RouteScreen.home.name);
+        navigator.pushReplacementNamed(RouteScreen.main.name);
       }
     });
   }
@@ -147,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
       await firebaseAuthProvider.signInUser(email, password);
       if (firebaseAuthProvider.authStatus == FirebaseAuthStatus.authenticated) {
         await sharedPreferenceProvider.login();
-        navigator.pushReplacementNamed(RouteScreen.home.name);
+        navigator.pushReplacementNamed(RouteScreen.main.name);
       } else {
         scaffoldMessenger.showSnackBar(
           SnackBar(

@@ -75,9 +75,9 @@ class MyApp extends StatelessWidget {
       routes: {
         RouteScreen.login.name: (context) => const LoginScreen(),
         RouteScreen.register.name: (context) => const RegisterScreen(),
-        RouteScreen.home.name: (context) => const BottomNavBarPage(),
-        '/profile': (context) => ProfilePage(),
-        '/change-password': (context) => PasswordChangePage(),
+        RouteScreen.main.name: (context) => const BottomNavBarPage(),
+        RouteScreen.profile.name: (context) => ProfilePage(),
+        RouteScreen.changePassword.name: (context) => PasswordChangePage(),
       },
     );
   }

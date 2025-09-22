@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:skrining_apps/provider/firebase_auth_provider.dart';
 import 'package:skrining_apps/widgets/health_check_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -9,11 +11,35 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String? _cachedUsername;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final profile = context.read<FirebaseAuthProvider>().profile;
+    if (profile != null && profile.fullname != null) {
+      _cachedUsername = profile.fullname!;
+    }
+  }
+
+  String _getUsername() {
+    final fullname = _cachedUsername ?? "Pengguna";
+    final parts = fullname.split(" ");
+    if (parts.length == 1) {
+      return parts.first;
+    } else if (parts.length > 1) {
+      return "${parts[0]} ${parts[1]}";
+    }
+    return "Pengguna";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Selamat Datang, Kevin 👋'),
+        title: Text(
+          'Selamat Datang, ${_getUsername()}',
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
         backgroundColor: Theme.of(context).primaryColorLight,
       ),
       body: SingleChildScrollView(
