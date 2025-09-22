@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
       home: BottomNavBarPage(),
       routes: {
         '/profile': (context) => ProfilePage(),
+        '/change-password': (context) => PasswordChangePage(),
       }
     );
   }

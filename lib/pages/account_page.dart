@@ -31,7 +31,7 @@ class AccountPage extends StatelessWidget {
                 title: const Text('Ganti Password'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
-                  
+                  Navigator.pushNamed(context, '/change-password');
                 },
               ),
               const Divider(),
