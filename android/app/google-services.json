@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "922997170231",
+    "project_id": "skrining-apps",
+    "storage_bucket": "skrining-apps.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922997170231:android:02feee789c595cd4b79fb2",
+        "android_client_info": {
+          "package_name": "com.example.skrining_apps"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjaYoFlJaxJPdhzkp0Iq1fOnTizl471R0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

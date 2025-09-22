@@ -77,7 +77,7 @@ class FontOverpass {
     fontSize: 16,
     fontWeight: FontWeight.w400,
     height: 1.5,
-    letterSpacing: 0.5,
+    letterSpacing: 0.3,
   );
 
   /// bodyMedium
