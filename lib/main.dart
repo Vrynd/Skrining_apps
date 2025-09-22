@@ -1,6 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:skrining_apps/pages/password_change_page.dart';
+import 'package:skrining_apps/pages/profile_page.dart';
+import 'package:skrining_apps/provider/user_profile_provider.dart';
+import 'package:skrining_apps/pages/bottom_navbar_page.dart';
+import 'package:skrining_apps/provider/bottom_navbar_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,6 +52,8 @@ void main() async {
           ),
         ),
         ChangeNotifierProvider(create: (context) => ShowHidePasswordProvider()),
+        ChangeNotifierProvider(create: (context) => BottomNavBarProvider()),
+        ChangeNotifierProvider(create: (context) => UserProfileProvider()),
       ],
       child: const MyApp(),
     ),
@@ -63,11 +70,14 @@ class MyApp extends StatelessWidget {
       title: 'Skrining Apps',
       theme: ThemeApps.lightTheme,
       darkTheme: ThemeApps.darkTheme,
+      themeMode: ThemeMode.system,
       initialRoute: RouteScreen.login.name,
       routes: {
         RouteScreen.login.name: (context) => const LoginScreen(),
         RouteScreen.register.name: (context) => const RegisterScreen(),
-        RouteScreen.home.name: (context) => const HomeScreen(),
+        RouteScreen.home.name: (context) => const BottomNavBarPage(),
+        '/profile': (context) => ProfilePage(),
+        '/change-password': (context) => PasswordChangePage(),
       },
     );
   }
