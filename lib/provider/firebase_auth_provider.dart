@@ -16,14 +16,14 @@ class FirebaseAuthProvider extends ChangeNotifier {
   String? get message => _message;
   FirebaseAuthStatus get authStatus => _authStatus;
 
-  Future createAccount(String email, String password) async {
+  Future createAccount(String fullname, String email, String password) async {
     try {
       _authStatus = FirebaseAuthStatus.creatingAccount;
       notifyListeners();
 
-      await _service.createUser(email, password);
+      await _service.createUser(fullname, email, password);
       _authStatus = FirebaseAuthStatus.accountCreated;
-      _message = "Create account is success";
+      _message = "Pembuatan akun berhasil";
     } catch (e) {
       _message = e.toString();
       _authStatus = FirebaseAuthStatus.error;
@@ -37,14 +37,14 @@ class FirebaseAuthProvider extends ChangeNotifier {
       notifyListeners();
 
       final result = await _service.signInUser(email, password);
-      _profile = Profile(
-        name: result.user?.displayName,
-        email: result.user?.email,
-        photoUrl: result.user?.photoURL,
-      );
+      final uid = result.user?.uid;
+
+      if (uid != null) {
+        _profile = await _service.getProfile(uid);
+      }
 
       _authStatus = FirebaseAuthStatus.authenticated;
-      _message = "Sign in is success";
+      _message = "Login berhasil";
     } catch (e) {
       _message = e.toString();
       _authStatus = FirebaseAuthStatus.error;
@@ -59,7 +59,8 @@ class FirebaseAuthProvider extends ChangeNotifier {
 
       await _service.signOut();
       _authStatus = FirebaseAuthStatus.unauthenticated;
-      _message = "Sign out is success";
+      _profile = null;
+      _message = "Logout berhasil";
     } catch (e) {
       _message = e.toString();
       _authStatus = FirebaseAuthStatus.error;
@@ -68,12 +69,16 @@ class FirebaseAuthProvider extends ChangeNotifier {
   }
 
   Future updateProfile() async {
-    final user = await _service.userChanges();
-    _profile = Profile(
-      name: user?.displayName,
-      email: user?.email,
-      photoUrl: user?.photoURL,
-    );
+    try {
+      final user = await _service.userChanges();
+      if (user != null) {
+        _profile = await _service.getProfile(user.uid);
+      }
+      notifyListeners();
+    } catch (e) {
+      _message = "Gagal memperbarui profil";
+      _authStatus = FirebaseAuthStatus.error;
+    }
     notifyListeners();
   }
 }

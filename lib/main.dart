@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skrining_apps/firebase_options.dart';
 import 'package:skrining_apps/provider/firebase_auth_provider.dart';
 import 'package:skrining_apps/provider/shared_prefrences_provider.dart';
+import 'package:skrining_apps/provider/show_hide_password_provider.dart';
 import 'package:skrining_apps/screens/auth/login_screen.dart';
 import 'package:skrining_apps/screens/auth/register_screen.dart';
 import 'package:skrining_apps/screens/main/home_screen.dart';
@@ -45,6 +46,7 @@ void main() async {
             context.read<SharedPreferencesService>(),
           ),
         ),
+        ChangeNotifierProvider(create: (context) => ShowHidePasswordProvider()),
       ],
       child: const MyApp(),
     ),

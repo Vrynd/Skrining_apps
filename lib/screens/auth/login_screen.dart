@@ -22,6 +22,21 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
+    final navigator = Navigator.of(context);
+    final isLogin = context.read<SharedPreferenceProvider>().isLogin;
+
+    Future.microtask(() async {
+      if (isLogin) {
+        await firebaseAuthProvider.updateProfile();
+        navigator.pushReplacementNamed(RouteScreen.home.name);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
@@ -65,6 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               controller: _passwordController,
                               prefixIcon: Icons.lock_outlined,
                               obscureText: true,
+                              isPassword: true,
                               keyboardType: TextInputType.visiblePassword,
                             ),
                             const SizedBox(height: 24),
@@ -118,21 +134,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
-    final navigator = Navigator.of(context);
-    final isLogin = context.read<SharedPreferenceProvider>().isLogin;
-
-    Future.microtask(() async {
-      if (isLogin) {
-        await firebaseAuthProvider.updateProfile();
-        navigator.pushReplacementNamed(RouteScreen.home.name);
-      }
-    });
-  }
-
   void _tapToLogin() async {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
@@ -144,18 +145,19 @@ class _LoginScreenState extends State<LoginScreen> {
       final scaffoldMessenger = ScaffoldMessenger.of(context);
 
       await firebaseAuthProvider.signInUser(email, password);
-      switch (firebaseAuthProvider.authStatus) {
-        case FirebaseAuthStatus.authenticated:
-          await sharedPreferenceProvider.login();
-          navigator.pushReplacementNamed(RouteScreen.home.name);
-        case _:
-          scaffoldMessenger.showSnackBar(
-            SnackBar(content: Text(firebaseAuthProvider.message ?? "")),
-          );
+      if (firebaseAuthProvider.authStatus == FirebaseAuthStatus.authenticated) {
+        await sharedPreferenceProvider.login();
+        navigator.pushReplacementNamed(RouteScreen.home.name);
+      } else {
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text(firebaseAuthProvider.message ?? ""),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
       }
     } else {
-      const message = "Fill the email and password correctly";
-
+      const message = "Masukkan email dan kata sandi dengan benar";
       final scaffoldMessenger = ScaffoldMessenger.of(context);
       scaffoldMessenger.showSnackBar(const SnackBar(content: Text(message)));
     }

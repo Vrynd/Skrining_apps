@@ -12,6 +12,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String? _cachedUsername;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final profile = context.read<FirebaseAuthProvider>().profile;
+    if (profile != null && profile.fullname != null) {
+      _cachedUsername = profile.fullname!;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,11 +30,18 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Hello, world!'),
+            Text(
+              'Selamat Datang, ${_getUsername()}',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const SizedBox(height: 16),
             ElevatedButton.icon(
               onPressed: _tapToSignOut,
-              icon: const Icon(Icons.logout),
-              label: const Text('Logout'),
+              icon: Icon(Icons.logout, size: 26),
+              label: Text(
+                'Logout',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
             ),
           ],
         ),
@@ -32,9 +49,15 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
+  String _getUsername() {
+    final fullname = _cachedUsername ?? "Pengguna";
+    final parts = fullname.split(" ");
+    if (parts.length == 1) {
+      return parts.first;
+    } else if (parts.length > 1) {
+      return "${parts[0]} ${parts[1]}";
+    }
+    return "Pengguna";
   }
 
   void _tapToSignOut() async {
@@ -51,7 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
         })
         .whenComplete(() {
           scaffoldMessenger.showSnackBar(
-            SnackBar(content: Text(firebaseAuthProvider.message ?? "")),
+            SnackBar(
+              content: Text(firebaseAuthProvider.message ?? "",),
+              behavior: SnackBarBehavior.floating,
+            ),
           );
         });
   }

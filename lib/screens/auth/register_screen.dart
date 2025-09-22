@@ -18,6 +18,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _fullnameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +51,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             AuthTextField(
+                              label: 'Nama Lengkap',
+                              hint: 'Masukkan nama lengkap Anda',
+                              controller: _fullnameController,
+                              prefixIcon: Icons.person_outline,
+                              keyboardType: TextInputType.name,
+                            ),
+                            const SizedBox(height: 20),
+                            AuthTextField(
                               label: 'Email',
                               hint: 'Masukkan email Anda',
                               controller: _emailController,
@@ -63,6 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               controller: _passwordController,
                               prefixIcon: Icons.lock_outline,
                               obscureText: true,
+                              isPassword: true,
                               keyboardType: TextInputType.visiblePassword,
                             ),
                             const SizedBox(height: 24),
@@ -103,22 +113,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void _tapToRegister() async {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
+    final fullname = _fullnameController.text.trim();
     if (email.isNotEmpty && password.isNotEmpty) {
       final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
       final navigator = Navigator.of(context);
       final scaffoldMessenger = ScaffoldMessenger.of(context);
 
-      await firebaseAuthProvider.createAccount(email, password);
-      switch (firebaseAuthProvider.authStatus) {
-        case FirebaseAuthStatus.accountCreated:
-          navigator.pop();
-        case _:
-          scaffoldMessenger.showSnackBar(
-            SnackBar(content: Text(firebaseAuthProvider.message ?? "")),
-          );
+      await firebaseAuthProvider.createAccount(fullname, email, password);
+      if (firebaseAuthProvider.authStatus ==
+          FirebaseAuthStatus.accountCreated) {
+        navigator.pop();
+      } else {
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text(firebaseAuthProvider.message ?? ""),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
       }
     } else {
-      const message = "Fill the email and password correctly";
+      const message = "Masukkan email dan kata sandi dengan benar";
       final scaffoldMessenger = ScaffoldMessenger.of(context);
       scaffoldMessenger.showSnackBar(const SnackBar(content: Text(message)));
     }
@@ -132,6 +146,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _fullnameController.dispose();
     super.dispose();
   }
 }
