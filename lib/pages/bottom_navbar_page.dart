@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:skrining_apps/pages/account_page.dart';
-import 'package:skrining_apps/pages/home_page.dart';
 import 'package:skrining_apps/provider/bottom_navbar_provider.dart';
+import 'package:skrining_apps/screens/main/home_screen.dart';
 
 class BottomNavBarPage extends StatelessWidget {
   const BottomNavBarPage({super.key});
@@ -15,7 +15,7 @@ class BottomNavBarPage extends StatelessWidget {
           body: IndexedStack(
             index: value.selectedIndex,
             children: [
-              HomePage(),
+              HomeScreen(),
               AccountPage(),
             ],
           ),

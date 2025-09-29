@@ -1,7 +1,7 @@
 enum RouteScreen {
   login('login'),
   register('register'),
-  main('main'),
+  home('home'),
   profile('profile'),
   changePassword('change_password');
 

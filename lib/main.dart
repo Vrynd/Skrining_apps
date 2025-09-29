@@ -1,10 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:skrining_apps/pages/password_change_page.dart';
-import 'package:skrining_apps/pages/profile_page.dart';
 import 'package:skrining_apps/provider/user_profile_provider.dart';
-import 'package:skrining_apps/pages/bottom_navbar_page.dart';
 import 'package:skrining_apps/provider/bottom_navbar_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +12,9 @@ import 'package:skrining_apps/provider/shared_prefrences_provider.dart';
 import 'package:skrining_apps/provider/show_hide_password_provider.dart';
 import 'package:skrining_apps/screens/auth/login_screen.dart';
 import 'package:skrining_apps/screens/auth/register_screen.dart';
-import 'package:skrining_apps/screens/main/home_screen.dart';
+import 'package:skrining_apps/screens/details/change_password.screen.dart';
+import 'package:skrining_apps/screens/details/profile_screen.dart';
+import 'package:skrining_apps/screens/main/navigation_screen.dart';
 import 'package:skrining_apps/screens/routes/route_screen.dart';
 import 'package:skrining_apps/service/firebase_auth_service.dart';
 import 'package:skrining_apps/service/shared_preferences_service.dart';
@@ -75,9 +74,9 @@ class MyApp extends StatelessWidget {
       routes: {
         RouteScreen.login.name: (context) => const LoginScreen(),
         RouteScreen.register.name: (context) => const RegisterScreen(),
-        RouteScreen.main.name: (context) => const BottomNavBarPage(),
-        RouteScreen.profile.name: (context) => ProfilePage(),
-        RouteScreen.changePassword.name: (context) => PasswordChangePage(),
+        RouteScreen.home.name: (context) => const NavigationScreen(),
+        RouteScreen.profile.name: (context) => ProfileScreen(),
+        RouteScreen.changePassword.name: (context) => ChangePasswordScreen(),
       },
     );
   }

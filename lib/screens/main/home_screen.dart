@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:skrining_apps/provider/shared_prefrences_provider.dart';
+import 'package:skrining_apps/components/widget/empty_state_card.dart';
+import 'package:skrining_apps/components/widget/health_check_card.dart';
+import 'package:skrining_apps/components/widget/metric_health_card.dart';
+import 'package:skrining_apps/components/widget/scaffold_widget.dart';
+import 'package:skrining_apps/components/widget/section_header.dart';
+import 'package:skrining_apps/components/widget/user_greeting.dart';
+import 'package:skrining_apps/components/widget/user_notification.dart';
 import 'package:skrining_apps/provider/firebase_auth_provider.dart';
-import 'package:skrining_apps/screens/routes/route_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,33 +27,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Home')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Selamat Datang, ${_getUsername()}',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: _tapToSignOut,
-              icon: Icon(Icons.logout, size: 26),
-              label: Text(
-                'Logout',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   String _getUsername() {
     final fullname = _cachedUsername ?? "Pengguna";
     final parts = fullname.split(" ");
@@ -60,25 +38,110 @@ class _HomeScreenState extends State<HomeScreen> {
     return "Pengguna";
   }
 
-  void _tapToSignOut() async {
-    final sharedPreferenceProvider = context.read<SharedPreferenceProvider>();
-    final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
-    final navigator = Navigator.of(context);
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-
-    await firebaseAuthProvider
-        .signOutUser()
-        .then((value) async {
-          await sharedPreferenceProvider.logout();
-          navigator.pushReplacementNamed(RouteScreen.login.name);
-        })
-        .whenComplete(() {
-          scaffoldMessenger.showSnackBar(
-            SnackBar(
-              content: Text(firebaseAuthProvider.message ?? "",),
-              behavior: SnackBarBehavior.floating,
+  @override
+  Widget build(BuildContext context) {
+    return ScaffoldWigdet(
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    UserGreeting(
+                      onTap: () {},
+                      username: _getUsername(),
+                      imageUrl:
+                          'https://www.w3schools.com/w3images/avatar2.png',
+                    ),
+                    UserNotification(
+                      onTap: () {},
+                      icon: Icons.notifications_active_outlined,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Stack(
+                  children: [
+                    HealthCheckCard(
+                      title: 'Yuk, Cek Kesehatanmu',
+                      subtitle: 'Mulai skrining kesehatanmu\nsekarang juga',
+                      buttonText: 'Mulai Periksa',
+                      onPressed: () {},
+                    ),
+                    Positioned(
+                      right: 20,
+                      bottom: 45,
+                      child: Image.asset(
+                        'assets/images/heart-rate.png',
+                        width: 82,
+                        height: 82,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 32),
+                SectionHeader(
+                  title: 'Metriks',
+                  subtitle: '12 Sept 2025',
+                  subtitleIcon: Icons.update_outlined,
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          MetricCard(
+                            title: "Usia anda saat ini",
+                            value: "32",
+                            unit: "Tahun",
+                          ),
+                          const SizedBox(height: 12),
+                          MetricCard(
+                            title: "Kolesterol",
+                            value: "210",
+                            unit: "Mg/dL",
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: MetricCard(
+                        height: 142,
+                        spacing: 8,
+                        title: "Tingkat Risiko",
+                        value: "20%",
+                        isCircular: true,
+                        percent: 0.20,
+                        progressColor: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 32),
+                SectionHeader(title: 'Riwayat Pemeriksan'),
+                const SizedBox(height: 8),
+                EmptyStateCard(
+                  icon: Icons.history_toggle_off,
+                  title: "Belum ada Riwayat Pemeriksaan",
+                  subtitle:
+                      "Mulai periksa kesehatanmu dengan\nklik tombol di atas",
+                ),
+              ],
             ),
-          );
-        });
+          ],
+        ),
+      ),
+    );
   }
 }
