@@ -137,29 +137,45 @@ class _LoginScreenState extends State<LoginScreen> {
   void _tapToLogin() async {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
 
-    if (email.isNotEmpty && password.isNotEmpty) {
-      final sharedPreferenceProvider = context.read<SharedPreferenceProvider>();
-      final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
-      final navigator = Navigator.of(context);
-      final scaffoldMessenger = ScaffoldMessenger.of(context);
+    // Validasi email dan password harus diisi
+    if (email.isEmpty || password.isEmpty) {
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(
+          content: Text("Email dan kata sandi tidak boleh kosong"),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+    // Validasi format email
+    final emailRegex = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+    if (!emailRegex.hasMatch(email)) {
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(
+          content: Text("Format email tidak valid"),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
 
-      await firebaseAuthProvider.signInUser(email, password);
-      if (firebaseAuthProvider.authStatus == FirebaseAuthStatus.authenticated) {
-        await sharedPreferenceProvider.login();
-        navigator.pushReplacementNamed(RouteScreen.home.name);
-      } else {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text(firebaseAuthProvider.message ?? ""),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+    final sharedPreferenceProvider = context.read<SharedPreferenceProvider>();
+    final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
+    final navigator = Navigator.of(context);
+
+    await firebaseAuthProvider.signInUser(email, password);
+    if (firebaseAuthProvider.authStatus == FirebaseAuthStatus.authenticated) {
+      await sharedPreferenceProvider.login();
+      navigator.pushReplacementNamed(RouteScreen.home.name);
     } else {
-      const message = "Masukkan email dan kata sandi dengan benar";
-      final scaffoldMessenger = ScaffoldMessenger.of(context);
-      scaffoldMessenger.showSnackBar(const SnackBar(content: Text(message)));
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Text(firebaseAuthProvider.message ?? ""),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 

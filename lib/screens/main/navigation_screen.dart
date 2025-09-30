@@ -22,9 +22,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
         return Scaffold(
           body: switch (nav.selectedIndex) {
             0 => const HomeScreen(),
-            1 => const AccountScreen(),
-            2 => const ScriningScreen(),
-            3 => const HistoryScreen(),
+            1 => const ScriningScreen(),
+            2 => const HistoryScreen(),
+            3 => const AccountScreen(),
             _ => const HomeScreen(),
           },
           bottomNavigationBar: SalomonBottomBar(
@@ -37,17 +37,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 icon: Icon(Icons.explore_outlined, size: 28),
                 title: Text(
                   "Beranda",
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
-                ),
-                selectedColor: Theme.of(context).colorScheme.primary,
-                unselectedColor: Theme.of(context).colorScheme.secondary,
-              ),
-              SalomonBottomBarItem(
-                icon: Icon(Icons.account_circle_outlined, size: 28),
-                title: Text(
-                  "Akun Saya",
                   style: Theme.of(
                     context,
                   ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
@@ -70,6 +59,17 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 icon: Icon(Icons.history_outlined, size: 28),
                 title: Text(
                   "Riwayat",
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                ),
+                selectedColor: Theme.of(context).colorScheme.primary,
+                unselectedColor: Theme.of(context).colorScheme.secondary,
+              ),
+              SalomonBottomBarItem(
+                icon: Icon(Icons.account_circle_outlined, size: 28),
+                title: Text(
+                  "Akun Saya",
                   style: Theme.of(
                     context,
                   ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),

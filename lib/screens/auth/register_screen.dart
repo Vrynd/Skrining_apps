@@ -114,27 +114,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
     final fullname = _fullnameController.text.trim();
-    if (email.isNotEmpty && password.isNotEmpty) {
-      final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
-      final navigator = Navigator.of(context);
-      final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final scaffoldMessenger2 = ScaffoldMessenger.of(context);
 
-      await firebaseAuthProvider.createAccount(fullname, email, password);
-      if (firebaseAuthProvider.authStatus ==
-          FirebaseAuthStatus.accountCreated) {
-        navigator.pop();
-      } else {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text(firebaseAuthProvider.message ?? ""),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+    // Validasi nama, email dan password harus diisi
+    if (email.isEmpty || password.isEmpty || fullname.isEmpty) {
+      scaffoldMessenger2.showSnackBar(
+        const SnackBar(
+          content: Text("Nama, email, dan kata sandi tidak boleh kosong"),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+    // Validasi format email
+    final emailRegex = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+    if (!emailRegex.hasMatch(email)) {
+      scaffoldMessenger2.showSnackBar(
+        const SnackBar(
+          content: Text("Format email tidak valid"),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
+    final navigator = Navigator.of(context);
+
+    await firebaseAuthProvider.createAccount(fullname, email, password);
+    if (firebaseAuthProvider.authStatus ==
+        FirebaseAuthStatus.accountCreated) {
+      navigator.pop();
     } else {
-      const message = "Masukkan email dan kata sandi dengan benar";
-      final scaffoldMessenger = ScaffoldMessenger.of(context);
-      scaffoldMessenger.showSnackBar(const SnackBar(content: Text(message)));
+      scaffoldMessenger2.showSnackBar(
+        SnackBar(
+          content: Text(firebaseAuthProvider.message ?? ""),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 
