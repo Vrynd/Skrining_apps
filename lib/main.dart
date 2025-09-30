@@ -12,7 +12,7 @@ import 'package:skrining_apps/provider/shared_prefrences_provider.dart';
 import 'package:skrining_apps/provider/show_hide_password_provider.dart';
 import 'package:skrining_apps/screens/auth/login_screen.dart';
 import 'package:skrining_apps/screens/auth/register_screen.dart';
-import 'package:skrining_apps/screens/details/change_password.screen.dart';
+import 'package:skrining_apps/screens/details/change_password_screen.dart';
 import 'package:skrining_apps/screens/details/profile_screen.dart';
 import 'package:skrining_apps/screens/main/navigation_screen.dart';
 import 'package:skrining_apps/screens/routes/route_screen.dart';
@@ -52,7 +52,7 @@ void main() async {
         ),
         ChangeNotifierProvider(create: (context) => ShowHidePasswordProvider()),
         ChangeNotifierProvider(create: (context) => BottomNavBarProvider()),
-        ChangeNotifierProvider(create: (context) => UserProfileProvider()),
+        // ChangeNotifierProvider(create: (context) => UserProfileProvider()),
       ],
       child: const MyApp(),
     ),
