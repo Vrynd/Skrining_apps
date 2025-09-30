@@ -27,6 +27,7 @@ class FirebaseAuthService {
           fullname: fullname,
           email: email,
           photoUrl: null,
+          birthDate: null,
         );
         await _firestore
             .collection("users")
@@ -82,6 +83,13 @@ class FirebaseAuthService {
     }
   }
 
+  Future<void> saveProfile(Profile profile) async {
+  await FirebaseFirestore.instance
+      .collection('users')
+      .doc(profile.uid)
+      .set(profile.toJson(), SetOptions(merge: true));
+}
+
   Future<void> signOut() async {
     try {
       await _auth.signOut();
@@ -89,6 +97,8 @@ class FirebaseAuthService {
       throw Exception("Logout gagal. Silakan coba lagi");
     }
   }
+
+  User? getCurrentUser() => _auth.currentUser;
 
   Future<User?> userChanges() => _auth.userChanges().first;
 }

@@ -8,12 +8,14 @@ class FirebaseAuthProvider extends ChangeNotifier {
 
   FirebaseAuthProvider(this._service);
 
+  bool _isLoading = false;
   String? _message;
   Profile? _profile;
   FirebaseAuthStatus _authStatus = FirebaseAuthStatus.unauthenticated;
 
   Profile? get profile => _profile;
   String? get message => _message;
+  bool get isLoading => _isLoading;
   FirebaseAuthStatus get authStatus => _authStatus;
 
   Future createAccount(String fullname, String email, String password) async {
@@ -65,6 +67,17 @@ class FirebaseAuthProvider extends ChangeNotifier {
       _message = e.toString();
       _authStatus = FirebaseAuthStatus.error;
     }
+    notifyListeners();
+  }
+
+  Future getUserProfile() async {
+    _isLoading = true;
+    notifyListeners();
+    final user = await _service.getCurrentUser();
+    if (user != null) {
+      _profile = await _service.getProfile(user.uid);
+    }
+    _isLoading = false;
     notifyListeners();
   }
 
