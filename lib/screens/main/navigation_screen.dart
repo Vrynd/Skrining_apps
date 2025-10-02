@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:skrining_apps/components/widget/scaffold_widget.dart';
 import 'package:skrining_apps/provider/bottom_navbar_provider.dart';
 import 'package:skrining_apps/screens/main/account_screen.dart';
 import 'package:skrining_apps/screens/main/history_screen.dart';
@@ -19,7 +20,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   Widget build(BuildContext context) {
     return Consumer<BottomNavBarProvider>(
       builder: (context, nav, child) {
-        return Scaffold(
+        return ScaffoldWigdet(
           body: switch (nav.selectedIndex) {
             0 => const HomeScreen(),
             1 => const ScriningScreen(),

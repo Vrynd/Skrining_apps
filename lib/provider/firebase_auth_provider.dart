@@ -25,9 +25,9 @@ class FirebaseAuthProvider extends ChangeNotifier {
 
       await _service.createUser(fullname, email, password);
       _authStatus = FirebaseAuthStatus.accountCreated;
-      _message = "Pembuatan akun berhasil";
+      _message = "Pembuatan Akun Berhasil";
     } catch (e) {
-      _message = e.toString();
+      _message = e is String ? e : e.toString();
       _authStatus = FirebaseAuthStatus.error;
     }
     notifyListeners();
@@ -46,9 +46,9 @@ class FirebaseAuthProvider extends ChangeNotifier {
       }
 
       _authStatus = FirebaseAuthStatus.authenticated;
-      _message = "Login berhasil";
+      _message = "Login Berhasil";
     } catch (e) {
-      _message = e.toString();
+      _message = e is String ? e : e.toString();
       _authStatus = FirebaseAuthStatus.error;
     }
     notifyListeners();
@@ -62,11 +62,27 @@ class FirebaseAuthProvider extends ChangeNotifier {
       await _service.signOut();
       _authStatus = FirebaseAuthStatus.unauthenticated;
       _profile = null;
-      _message = "Logout berhasil";
+      _message = "Logout Berhasil";
     } catch (e) {
-      _message = e.toString();
+      _message =  e is String ? e : e.toString();
       _authStatus = FirebaseAuthStatus.error;
     }
+    notifyListeners();
+  }
+
+  Future resetPassword(String email) async {
+    try {
+      _authStatus = FirebaseAuthStatus.ressetingPassword;
+      notifyListeners();
+
+      await _service.resetPassword(email);
+      _authStatus = FirebaseAuthStatus.passwordResetEmailSent;
+      _message = "Link reset kata sandi sudah dikirim ke email anda";
+    } catch (e) {
+      _message =  e is String ? e : e.toString();
+      _authStatus = FirebaseAuthStatus.error;
+    }
+
     notifyListeners();
   }
 

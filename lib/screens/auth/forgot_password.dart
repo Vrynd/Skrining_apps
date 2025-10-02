@@ -8,18 +8,33 @@ import 'package:skrining_apps/components/template/auth/auth_text_field.dart';
 import 'package:skrining_apps/components/widget/scaffold_widget.dart';
 import 'package:skrining_apps/firebase_auth_status.dart';
 import 'package:skrining_apps/provider/firebase_auth_provider.dart';
+import 'package:skrining_apps/provider/shared_prefrences_provider.dart';
+import 'package:skrining_apps/screens/routes/route_screen.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _fullnameController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
+    final navigator = Navigator.of(context);
+    final isLogin = context.read<SharedPreferenceProvider>().isLogin;
+
+    Future.microtask(() async {
+      if (isLogin) {
+        await firebaseAuthProvider.updateProfile();
+        navigator.pushReplacementNamed(RouteScreen.home.name);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +66,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         AuthHero(
-                          title: 'Buat Akun',
-                          subtitle: 'Silakan masukkan data akun Anda',
+                          title: 'Lupa Kata Sandi',
+                          subtitle: 'Silakan masukkan email Anda untuk mereset',
                         ),
                         const SizedBox(height: 15),
                         AuthCard(
@@ -62,38 +77,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             children: [
                               AutofillGroup(
                                 child: AuthTextField(
-                                  label: 'Nama Lengkap',
-                                  hint: 'Masukkan nama lengkap Anda',
-                                  controller: _fullnameController,
-                                  prefixIcon: Icons.person_outline,
-                                  keyboardType: TextInputType.name,
-                                  autofillHints: const [AutofillHints.name],
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                              AutofillGroup(
-                                child: AuthTextField(
                                   label: 'Email',
                                   hint: 'Masukkan email Anda',
                                   controller: _emailController,
                                   prefixIcon: Icons.email_outlined,
                                   keyboardType: TextInputType.emailAddress,
-                                  autofillHints: const [AutofillHints.email],
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                              AutofillGroup(
-                                child: AuthTextField(
-                                  label: 'Kata Sandi',
-                                  hint: 'Masukkan kata sandi Anda',
-                                  controller: _passwordController,
-                                  prefixIcon: Icons.lock_outline,
-                                  obscureText: true,
-                                  isPassword: true,
-                                  keyboardType: TextInputType.visiblePassword,
-                                  autofillHints: const [
-                                    AutofillHints.newPassword,
-                                  ],
+                                  autofillHints: [AutofillHints.email],
                                 ),
                               ),
                               const SizedBox(height: 24),
@@ -101,11 +90,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 builder: (context, value, child) {
                                   final isLoading =
                                       value.authStatus ==
-                                      FirebaseAuthStatus.creatingAccount;
+                                      FirebaseAuthStatus.ressetingPassword;
                                   return AuthButton(
-                                    textAction: 'Daftar',
+                                    textAction: "Reset Kata Sandi",
+                                    onPressed: _tapToReset,
                                     isLoading: isLoading,
-                                    onPressed: _tapToRegister,
                                   );
                                 },
                               ),
@@ -114,8 +103,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         const SizedBox(height: 15),
                         AuthRedirect(
-                          questionText: 'Sudah punya akun?',
-                          actionText: 'Masuk',
+                          questionText: "Ingat kata sandi?",
+                          actionText: "Klik disini",
                           onTap: _goToLogin,
                         ),
                       ],
@@ -130,51 +119,62 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  void _tapToRegister() async {
+  void _tapToReset() async {
     final email = _emailController.text.trim();
-    final password = _passwordController.text.trim();
-    final fullname = _fullnameController.text.trim();
-    if (email.isNotEmpty && password.isNotEmpty) {
-      final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
-      final navigator = Navigator.of(context);
-      final scaffoldMessenger = ScaffoldMessenger.of(context);
 
-      await firebaseAuthProvider.createAccount(fullname, email, password);
-      if (firebaseAuthProvider.authStatus ==
-          FirebaseAuthStatus.accountCreated) {
-        navigator.pop();
-      } else {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text(
-              firebaseAuthProvider.message ?? "",
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
-    } else {
-      const message = "Masukkan email dan kata sandi dengan benar";
-      final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+
+    if (email.isEmpty) {
       scaffoldMessenger.showSnackBar(
         SnackBar(
           behavior: SnackBarBehavior.floating,
-          content: Text(message, style: Theme.of(context).textTheme.bodyLarge),
+          content: Text(
+            "Masukkan email anda dengan benar",
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+        ),
+      );
+      return;
+    }
+
+    await firebaseAuthProvider.resetPassword(email);
+    if (!mounted) return;
+    if (firebaseAuthProvider.authStatus ==
+        FirebaseAuthStatus.passwordResetEmailSent) {
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text(
+            firebaseAuthProvider.message ??
+                "Cek email Anda untuk reset kata sandi",
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+        ),
+      );
+
+      navigator.pop();
+    } else if (firebaseAuthProvider.authStatus == FirebaseAuthStatus.error) {
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text(
+            firebaseAuthProvider.message ?? "Terjadi kesalahan",
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
         ),
       );
     }
   }
 
-  void _goToLogin() {
-    Navigator.pop(context);
+  void _goToLogin() async {
+    Navigator.pushNamed(context, RouteScreen.login.name);
   }
 
   @override
   void dispose() {
     _emailController.dispose();
-    _passwordController.dispose();
-    _fullnameController.dispose();
     super.dispose();
   }
 }

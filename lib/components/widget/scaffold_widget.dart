@@ -41,6 +41,7 @@ class ScaffoldWigdet extends StatelessWidget {
       backgroundColor: backgroundColor,
       appBar: appBar,
       body: body,
+      bottomNavigationBar: bottomNavigationBar,
     );
   }
 }

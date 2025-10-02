@@ -41,12 +41,13 @@ class FirebaseAuthService {
           "Email sudah digunakan. Silakan gunakan email lain",
         "invalid-email" => "Format email tidak valid",
         "operation-not-allowed" => "Terjadi kesalahan. Silakan coba lagi nanti",
-        "weak-password" => "Kata sandi terlalu lemah. Gunakan kombinasi huruf dan angka",
+        "weak-password" =>
+          "Kata sandi terlalu lemah. Gunakan kombinasi huruf dan angka",
         _ => "Registrasi gagal. Silakan coba lagi",
       };
-      throw Exception(errorMessage);
+      throw errorMessage;
     } catch (e) {
-      throw Exception(e);
+      throw e.toString();
     }
   }
 
@@ -65,9 +66,9 @@ class FirebaseAuthService {
         "wrong-password" => "Email atau kata sandi salah",
         _ => "Login gagal, Silakan coba lagi",
       };
-      throw Exception(errorMessage);
+      throw errorMessage;
     } catch (e) {
-      throw Exception(e);
+      throw e.toString();
     }
   }
 
@@ -79,22 +80,34 @@ class FirebaseAuthService {
       }
       return null;
     } catch (e) {
-      throw Exception(e);
+      throw e.toString();
     }
   }
 
   Future<void> saveProfile(Profile profile) async {
-  await FirebaseFirestore.instance
-      .collection('users')
-      .doc(profile.uid)
-      .set(profile.toJson(), SetOptions(merge: true));
-}
+    try {
+      await _firestore
+          .collection('users')
+          .doc(profile.uid)
+          .set(profile.toJson(), SetOptions(merge: true));
+    } catch (e) {
+      throw "Gagal menyimpan profil";
+    }
+  }
 
   Future<void> signOut() async {
     try {
       await _auth.signOut();
     } catch (e) {
-      throw Exception("Logout gagal. Silakan coba lagi");
+      throw "Logout gagal. Silakan coba lagi";
+    }
+  }
+
+  Future<void> resetPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      throw "Gagal mengirim email reset kata sandi";
     }
   }
 

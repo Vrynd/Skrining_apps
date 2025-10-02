@@ -10,6 +10,7 @@ class AuthTextField extends StatelessWidget {
   final bool obscureText;
   final bool isPassword;
   final TextInputType keyboardType;
+  final List<String>? autofillHints;
 
   const AuthTextField({
     super.key,
@@ -20,6 +21,7 @@ class AuthTextField extends StatelessWidget {
     this.obscureText = false,
     this.isPassword = false,
     this.keyboardType = TextInputType.text,
+    required this.autofillHints,
   });
 
   @override
@@ -44,6 +46,7 @@ class AuthTextField extends StatelessWidget {
               style: const TextStyle(fontSize: 18),
               obscureText: isObscure,
               keyboardType: keyboardType,
+              autofillHints: autofillHints,
               decoration: InputDecoration(
                 prefixIcon: Icon(
                   prefixIcon,
