@@ -4,7 +4,7 @@ import 'package:skrining_apps/components/widget/empty_state_card.dart';
 import 'package:skrining_apps/components/widget/health_check_card.dart';
 import 'package:skrining_apps/components/widget/metric_health_card.dart';
 import 'package:skrining_apps/components/widget/scaffold_widget.dart';
-import 'package:skrining_apps/components/widget/section_header.dart';
+import 'package:skrining_apps/components/widget/section_title.dart';
 import 'package:skrining_apps/components/widget/user_greeting.dart';
 import 'package:skrining_apps/components/widget/user_notification.dart';
 import 'package:skrining_apps/provider/firebase_auth_provider.dart';
@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 const SizedBox(height: 32),
-                SectionHeader(
+                SectionTitle(
                   title: 'Metriks',
                   subtitle: '12 Sept 2025',
                   subtitleIcon: Icons.update_outlined,
@@ -129,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 const SizedBox(height: 32),
-                SectionHeader(title: 'Riwayat Pemeriksan'),
+                SectionTitle(title: 'Riwayat Pemeriksan'),
                 const SizedBox(height: 8),
                 EmptyStateCard(
                   icon: Icons.history_toggle_off,

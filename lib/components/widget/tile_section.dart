@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class AccountSection extends StatelessWidget {
+class TileSection extends StatelessWidget {
   final List<Widget> children;
 
-  const AccountSection({super.key, required this.children});
+  const TileSection({super.key, required this.children});
 
   @override
   Widget build(BuildContext context) {

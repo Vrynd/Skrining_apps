@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 
-class AccountTileCard extends StatelessWidget {
+class TileCard extends StatelessWidget {
   final IconData icon;
   final Color lightColor;
   final Color darkColor;
   final String title;
+  final bool isTitleBold;
+  final String? subtitle;
   final VoidCallback? onTap;
   final Widget? trailing;
   final bool isSwitch;
   final bool switchValue;
   final ValueChanged<bool>? onSwitchChanged;
 
-  const AccountTileCard({
+  const TileCard({
     super.key,
     required this.icon,
     required this.lightColor,
     required this.darkColor,
     required this.title,
+    this.isTitleBold = false,
+    this.subtitle,
     this.onTap,
     this.trailing,
     this.isSwitch = false,
@@ -38,8 +42,17 @@ class AccountTileCard extends StatelessWidget {
         title,
         style: Theme.of(context).textTheme.titleMedium?.copyWith(
           color: Theme.of(context).colorScheme.onSurface,
+          fontWeight: isTitleBold ? FontWeight.w600 : null,
         ),
       ),
+      subtitle: subtitle != null
+          ? Text(
+              subtitle!,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Theme.of(context).colorScheme.outline,
+              ),
+            )
+          : null,
       trailing: isSwitch
           ? Switch.adaptive(
               value: switchValue,

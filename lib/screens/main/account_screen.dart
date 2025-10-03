@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:skrining_apps/components/widget/account_section.dart';
-import 'package:skrining_apps/components/widget/account_tile_card.dart';
+import 'package:skrining_apps/components/widget/tile_section.dart';
+import 'package:skrining_apps/components/widget/tile_card.dart';
 
 import 'package:skrining_apps/components/widget/scaffold_widget.dart';
 import 'package:skrining_apps/provider/firebase_auth_provider.dart';
@@ -57,9 +57,9 @@ class AccountScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 16),
-                AccountSection(
+                TileSection(
                   children: [
-                    AccountTileCard(
+                    TileCard(
                       icon: Icons.person_outline,
                       lightColor: Colors.blue,
                       darkColor: Colors.blue.shade200,
@@ -69,7 +69,7 @@ class AccountScreen extends StatelessWidget {
                         RouteScreen.profile.name,
                       ),
                     ),
-                    AccountTileCard(
+                    TileCard(
                       icon: Icons.lock_outline,
                       lightColor: Colors.orange,
                       darkColor: Colors.orange.shade200,
@@ -79,7 +79,7 @@ class AccountScreen extends StatelessWidget {
                         RouteScreen.changePassword.name,
                       ),
                     ),
-                    AccountTileCard(
+                    TileCard(
                       icon: Icons.info_outline,
                       lightColor: Colors.teal,
                       darkColor: Colors.teal.shade200,
@@ -90,9 +90,9 @@ class AccountScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 16),
 
-                AccountSection(
+                TileSection(
                   children: [
-                    AccountTileCard(
+                    TileCard(
                       icon: Icons.notification_add_outlined,
                       lightColor: Colors.purple,
                       darkColor: Colors.purple.shade200,
@@ -101,7 +101,7 @@ class AccountScreen extends StatelessWidget {
                       switchValue: false,
                       onSwitchChanged: (value) {},
                     ),
-                    AccountTileCard(
+                    TileCard(
                       icon: Icons.dark_mode_outlined,
                       lightColor: Colors.indigo,
                       darkColor: Colors.indigo.shade200,
@@ -114,9 +114,9 @@ class AccountScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 16),
 
-                AccountSection(
+                TileSection(
                   children: [
-                    AccountTileCard(
+                    TileCard(
                       icon: Icons.power_settings_new_outlined,
                       lightColor: Colors.red,
                       darkColor: Colors.red.shade300,
