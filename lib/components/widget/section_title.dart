@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class SectionHeader extends StatelessWidget {
+class SectionTitle extends StatelessWidget {
   final String title;
   final String? subtitle;
   final IconData? subtitleIcon;
 
-  const SectionHeader({
+  const SectionTitle({
     super.key,
     required this.title,
     this.subtitle,
