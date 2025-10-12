@@ -1,14 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:skrining_apps/provider/bottom_navbar_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skrining_apps/firebase_options.dart';
+import 'package:skrining_apps/provider/bottom_navbar_provider.dart';
 import 'package:skrining_apps/provider/firebase_auth_provider.dart';
 import 'package:skrining_apps/provider/shared_prefrences_provider.dart';
 import 'package:skrining_apps/provider/show_hide_password_provider.dart';
+import 'package:skrining_apps/provider/time_provider.dart';
 import 'package:skrining_apps/screens/auth/forgot_password.dart';
 import 'package:skrining_apps/screens/auth/login_screen.dart';
 import 'package:skrining_apps/screens/auth/register_screen.dart';
@@ -51,6 +52,7 @@ void main() async {
           ),
         ),
         ChangeNotifierProvider(create: (context) => ShowHidePasswordProvider()),
+        ChangeNotifierProvider(create: (context) => TimeProvider()),
         ChangeNotifierProvider(create: (context) => BottomNavBarProvider()),
         // ChangeNotifierProvider(create: (context) => UserProfileProvider()),
       ],
