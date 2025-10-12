@@ -176,6 +176,27 @@ class _ScriningScreenState extends State<ScriningScreen> {
                     'Non-Anginal Pain',
                     'Asymptomatic',
                   ],
+                  infoItems: [
+                    {
+                      'title': 'TA - Typical Angina',
+                      'subtitle':
+                          'Nyeri dada saat beraktivitas, dan hilang saat istirahat.',
+                    },
+                    {
+                      'title': 'ATA - Atypical Angina',
+                      'subtitle':
+                          'Nyeri dada tidak biasa, muncul meski tidak aktif.',
+                    },
+                    {
+                      'title': 'NAP - Non-Anginal Pain',
+                      'subtitle':
+                          'Nyeri dada bukan dari jantung, biasanya otot/tulang.',
+                    },
+                    { 
+                      'title': 'ASY - Asymptomatic',
+                      'subtitle': 'Tidak ada nyeri dada, pemeriksaan rutin tetap penting.',
+                    },
+                  ],
                   selectedValue: selectedChestPainType,
                   onChanged: (value) {
                     setState(() => selectedChestPainType = value);
@@ -189,6 +210,23 @@ class _ScriningScreenState extends State<ScriningScreen> {
                     'Normal',
                     'gelombang ST-T abnormal',
                     'Left Ventricular Hypertrophy',
+                  ],
+                  infoItems: [
+                    {
+                      'title': 'Normal',
+                      'subtitle':
+                          'Jantung bekerja normal, aktivitas listrik jantung sehat',
+                    },
+                    {
+                      'title': 'ST (Gelombang ST-T Abnormal)',
+                      'subtitle':
+                          'Gelombang listrik jantung berubah, aliran darah terganggu',
+                    },
+                    {
+                      'title': 'LVH (Left Ventricular Hypertrophy)',
+                      'subtitle':
+                          'Otot jantung bagian kiri menebal, karena tekanan darah tinggi',
+                    },
                   ],
                   selectedValue: selectedEKGResult,
                   onChanged: (value) {
@@ -209,6 +247,23 @@ class _ScriningScreenState extends State<ScriningScreen> {
                   title:
                       'Bagaimana pola kemiringan segmen ST anda saat olahraga?',
                   options: ['Menanjak', 'Datar', 'Menurun'],
+                  infoItems: [
+                    {
+                      'title': 'Menanjak (Up)',
+                      'subtitle':
+                          'Grafik naik, jantung merespon dengan baik saat aktivitas',
+                    },
+                    {
+                      'title': 'Datar (Flat)',
+                      'subtitle':
+                          'Grafik datar, jantung tidak banyak berubah saat aktivitas',
+                    },
+                    {
+                      'title': 'Menurun (Down)',
+                      'subtitle':
+                          'Grafik menurun, mungkin jantung kesulitan mendapat oksigen',
+                    },
+                  ],
                   selectedValue: selectedStSlope,
                   onChanged: (value) {
                     setState(() => selectedStSlope = value);

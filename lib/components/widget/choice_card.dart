@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class ChoiceCard extends StatelessWidget {
   final String title;
   final IconData? infoIcon;
-  final String? infoText;
   final List<String> options;
   final String? selectedValue;
   final ValueChanged<String?> onChanged;
+  final List<Map<String, String>>? infoItems;
 
   const ChoiceCard({
     super.key,
@@ -15,18 +15,14 @@ class ChoiceCard extends StatelessWidget {
     required this.selectedValue,
     required this.onChanged,
     this.infoIcon = Icons.info_outline,
-    this.infoText,
+    this.infoItems,
   });
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final textTheme = theme.textTheme;
-
     return Container(
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerLowest,
+        color: Theme.of(context).colorScheme.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16),
       ),
       padding: const EdgeInsets.all(16),
@@ -40,24 +36,110 @@ class ChoiceCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: textTheme.titleMedium?.copyWith(
-                    color: colorScheme.outline,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.outline,
                   ),
                 ),
               ),
-              SizedBox(width: 4),
-              if (infoIcon != null)
-                Icon(infoIcon, size: 20, color: colorScheme.secondary),
+              const SizedBox(width: 4),
+              if (infoItems != null)
+                InkWell(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => Dialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(18),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Informasi',
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleLarge,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () => Navigator.pop(context),
+                                    child: const Icon(Icons.close_outlined),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+                              Flexible(
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: infoItems!.map((item) {
+                                      return Container(
+                                        margin: const EdgeInsets.only(
+                                          bottom: 8,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primaryContainer,
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                        ),
+                                        child: ListTile(
+                                          dense: true,
+                                          title: Text(
+                                            item['title'] ?? '',
+                                            style: Theme.of(
+                                              context,
+                                            ).textTheme.titleMedium,
+                                          ),
+                                          subtitle: Padding(
+                                            padding: EdgeInsets.only(top: 3),
+                                            child: Text(
+                                              item['subtitle'] ?? '',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.copyWith(
+                                                    fontSize: 16,
+                                                    color: Theme.of(
+                                                      context,
+                                                    ).colorScheme.outline,
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  child: Icon(
+                    infoIcon,
+                    size: 20,
+                    color: Theme.of(context).colorScheme.tertiary,
+                  ),
+                ),
             ],
           ),
           const SizedBox(height: 12),
-
           Container(
             decoration: BoxDecoration(
-              color: colorScheme.surfaceContainerLow,
+              color: Theme.of(context).colorScheme.surfaceContainerLow,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: colorScheme.surfaceContainerHigh,
+                color: Theme.of(context).colorScheme.surfaceContainerHigh,
                 width: 1.5,
               ),
             ),
@@ -73,19 +155,19 @@ class ChoiceCard extends StatelessWidget {
                     contentPadding: EdgeInsets.zero,
                     fillColor: WidgetStateProperty.resolveWith<Color>((states) {
                       if (states.contains(WidgetState.selected)) {
-                        return colorScheme.primary;
+                        return Theme.of(context).colorScheme.primary;
                       }
-                      return colorScheme.outlineVariant;
+                      return Theme.of(context).colorScheme.outlineVariant;
                     }),
                     title: Text(
                       options[i],
                       style: (options[i] == selectedValue)
-                          ? textTheme.titleMedium?.copyWith(
-                              color: colorScheme.outline,
+                          ? Theme.of(context).textTheme.titleMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.outline,
                               fontWeight: FontWeight.w600,
                             )
-                          : textTheme.bodyLarge?.copyWith(
-                              color: colorScheme.outline,
+                          : Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: Theme.of(context).colorScheme.outline,
                             ),
                     ),
                   ),
@@ -93,7 +175,7 @@ class ChoiceCard extends StatelessWidget {
                     Divider(
                       height: 0,
                       thickness: 1.4,
-                      color: colorScheme.surfaceContainerHigh,
+                      color: Theme.of(context).colorScheme.surfaceContainerHigh,
                     ),
                 ],
               ],
