@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skrining_apps/models/medical_terms.dart';
 
 class ChoiceCard extends StatelessWidget {
   final String title;
@@ -6,7 +7,7 @@ class ChoiceCard extends StatelessWidget {
   final List<String> options;
   final String? selectedValue;
   final ValueChanged<String?> onChanged;
-  final List<Map<String, String>>? infoItems;
+  final List<Term>? infoItems;
 
   const ChoiceCard({
     super.key,
@@ -93,7 +94,7 @@ class ChoiceCard extends StatelessWidget {
                                         child: ListTile(
                                           dense: true,
                                           title: Text(
-                                            item['title'] ?? '',
+                                            item.title,
                                             style: Theme.of(
                                               context,
                                             ).textTheme.titleMedium,
@@ -101,7 +102,7 @@ class ChoiceCard extends StatelessWidget {
                                           subtitle: Padding(
                                             padding: EdgeInsets.only(top: 3),
                                             child: Text(
-                                              item['subtitle'] ?? '',
+                                              item.subtitle,
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .bodyMedium

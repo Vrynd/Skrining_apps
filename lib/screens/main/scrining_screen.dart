@@ -6,6 +6,7 @@ import 'package:skrining_apps/components/widget/scaffold_widget.dart';
 import 'package:skrining_apps/components/widget/section_title.dart';
 import 'package:skrining_apps/components/widget/tile_card.dart';
 import 'package:skrining_apps/components/widget/tile_section.dart';
+import 'package:skrining_apps/models/medical_terms.dart';
 
 class ScriningScreen extends StatefulWidget {
   const ScriningScreen({super.key});
@@ -176,27 +177,7 @@ class _ScriningScreenState extends State<ScriningScreen> {
                     'Non-Anginal Pain',
                     'Asymptomatic',
                   ],
-                  infoItems: [
-                    {
-                      'title': 'TA - Typical Angina',
-                      'subtitle':
-                          'Nyeri dada saat beraktivitas, dan hilang saat istirahat.',
-                    },
-                    {
-                      'title': 'ATA - Atypical Angina',
-                      'subtitle':
-                          'Nyeri dada tidak biasa, muncul meski tidak aktif.',
-                    },
-                    {
-                      'title': 'NAP - Non-Anginal Pain',
-                      'subtitle':
-                          'Nyeri dada bukan dari jantung, biasanya otot/tulang.',
-                    },
-                    { 
-                      'title': 'ASY - Asymptomatic',
-                      'subtitle': 'Tidak ada nyeri dada, pemeriksaan rutin tetap penting.',
-                    },
-                  ],
+                  infoItems: MedicalTerms.chestPainTerms,
                   selectedValue: selectedChestPainType,
                   onChanged: (value) {
                     setState(() => selectedChestPainType = value);
@@ -211,23 +192,7 @@ class _ScriningScreenState extends State<ScriningScreen> {
                     'gelombang ST-T abnormal',
                     'Left Ventricular Hypertrophy',
                   ],
-                  infoItems: [
-                    {
-                      'title': 'Normal',
-                      'subtitle':
-                          'Jantung bekerja normal, aktivitas listrik jantung sehat',
-                    },
-                    {
-                      'title': 'ST (Gelombang ST-T Abnormal)',
-                      'subtitle':
-                          'Gelombang listrik jantung berubah, aliran darah terganggu',
-                    },
-                    {
-                      'title': 'LVH (Left Ventricular Hypertrophy)',
-                      'subtitle':
-                          'Otot jantung bagian kiri menebal, karena tekanan darah tinggi',
-                    },
-                  ],
+                  infoItems: MedicalTerms.ekgTerms,
                   selectedValue: selectedEKGResult,
                   onChanged: (value) {
                     setState(() => selectedEKGResult = value);
@@ -237,6 +202,7 @@ class _ScriningScreenState extends State<ScriningScreen> {
                 ChoiceCard(
                   title: 'Apakah anda mengalami nyeri dada saat berolahraga?',
                   options: ['Ya', 'Tidak'],
+                  infoItems: MedicalTerms.exercisePainTerms,
                   selectedValue: selectedExercisePain,
                   onChanged: (value) {
                     setState(() => selectedExercisePain = value);
@@ -247,23 +213,7 @@ class _ScriningScreenState extends State<ScriningScreen> {
                   title:
                       'Bagaimana pola kemiringan segmen ST anda saat olahraga?',
                   options: ['Menanjak', 'Datar', 'Menurun'],
-                  infoItems: [
-                    {
-                      'title': 'Menanjak (Up)',
-                      'subtitle':
-                          'Grafik naik, jantung merespon dengan baik saat aktivitas',
-                    },
-                    {
-                      'title': 'Datar (Flat)',
-                      'subtitle':
-                          'Grafik datar, jantung tidak banyak berubah saat aktivitas',
-                    },
-                    {
-                      'title': 'Menurun (Down)',
-                      'subtitle':
-                          'Grafik menurun, mungkin jantung kesulitan mendapat oksigen',
-                    },
-                  ],
+                  infoItems: MedicalTerms.stSlopeTerms,
                   selectedValue: selectedStSlope,
                   onChanged: (value) {
                     setState(() => selectedStSlope = value);
