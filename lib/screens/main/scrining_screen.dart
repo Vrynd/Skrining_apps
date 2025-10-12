@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:skrining_apps/components/widget/choice_card.dart';
 import 'package:skrining_apps/components/widget/click_button.dart';
 import 'package:skrining_apps/components/widget/input_card.dart';
@@ -7,6 +9,7 @@ import 'package:skrining_apps/components/widget/section_title.dart';
 import 'package:skrining_apps/components/widget/tile_card.dart';
 import 'package:skrining_apps/components/widget/tile_section.dart';
 import 'package:skrining_apps/models/medical_terms.dart';
+import 'package:skrining_apps/provider/time_provider.dart';
 
 class ScriningScreen extends StatefulWidget {
   const ScriningScreen({super.key});
@@ -56,13 +59,31 @@ class _ScriningScreenState extends State<ScriningScreen> {
 
                 TileSection(
                   children: [
-                    TileCard(
-                      icon: Icons.calendar_today_outlined,
-                      lightColor: Colors.indigo,
-                      darkColor: Colors.indigo.shade200,
-                      title: 'Minggu, 12 Oktober 2025',
-                      trailing: Text('00.40'),
-                      isTitleBold: true,
+                    Consumer<TimeProvider>(
+                      builder: (context, timeProvider, child) {
+                        final dateTime = timeProvider.currentTime;
+                        final day = DateFormat.EEEE().format(dateTime);
+                        final date = DateFormat.d().format(dateTime);
+                        final month = DateFormat.MMMM().format(dateTime);
+                        final year = dateTime.year;
+                        final time = DateFormat.Hm().format(dateTime);
+
+                        return TileCard(
+                          icon: Icons.calendar_today_outlined,
+                          lightColor: Colors.indigo,
+                          darkColor: Colors.indigo.shade200,
+                          title: '$day, $date $month $year',
+                          trailing: Text(
+                            time,
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                          ),
+                          isTitleBold: true,
+                        );
+                      },
                     ),
                     TileCard(
                       icon: Icons.assignment_turned_in_outlined,
