@@ -175,11 +175,11 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         scaffoldMessenger.showSnackBar(
           SnackBar(
+            behavior: SnackBarBehavior.floating,
             content: Text(
               firebaseAuthProvider.message ?? "",
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),
             ),
-            behavior: SnackBarBehavior.floating,
           ),
         );
       }
@@ -189,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
       scaffoldMessenger.showSnackBar(
         SnackBar(
           behavior: SnackBarBehavior.floating,
-          content: Text(message, style: Theme.of(context).textTheme.bodyLarge),
+          content: Text(message, style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white)),
         ),
       );
     }
