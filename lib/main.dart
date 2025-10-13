@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skrining_apps/firebase_options.dart';
 import 'package:skrining_apps/provider/bottom_navbar_provider.dart';
 import 'package:skrining_apps/provider/firebase_auth_provider.dart';
+import 'package:skrining_apps/provider/question_provider.dart';
 import 'package:skrining_apps/provider/shared_prefrences_provider.dart';
 import 'package:skrining_apps/provider/show_hide_password_provider.dart';
 import 'package:skrining_apps/provider/time_provider.dart';
@@ -16,8 +17,10 @@ import 'package:skrining_apps/screens/auth/register_screen.dart';
 import 'package:skrining_apps/screens/details/change_password_screen.dart';
 import 'package:skrining_apps/screens/details/profile_screen.dart';
 import 'package:skrining_apps/screens/main/navigation_screen.dart';
+import 'package:skrining_apps/screens/main/question_screen.dart';
 import 'package:skrining_apps/screens/routes/route_screen.dart';
 import 'package:skrining_apps/service/firebase_auth_service.dart';
+import 'package:skrining_apps/service/question_service.dart';
 import 'package:skrining_apps/service/shared_preferences_service.dart';
 import 'package:skrining_apps/themes/theme_apps.dart';
 
@@ -54,7 +57,8 @@ void main() async {
         ChangeNotifierProvider(create: (context) => ShowHidePasswordProvider()),
         ChangeNotifierProvider(create: (context) => TimeProvider()),
         ChangeNotifierProvider(create: (context) => BottomNavBarProvider()),
-        // ChangeNotifierProvider(create: (context) => UserProfileProvider()),
+        Provider<QuestionService>(create: (context) => QuestionService()),
+        ChangeNotifierProvider(create: (context) => QuestionProvider(context.read<QuestionService>())),
       ],
       child: const MyApp(),
     ),
@@ -80,6 +84,7 @@ class MyApp extends StatelessWidget {
         RouteScreen.profile.name: (context) => ProfileScreen(),
         RouteScreen.changePassword.name: (context) => ChangePasswordScreen(),
         RouteScreen.forgotPassword.name: (context) => const ForgotPasswordScreen(),
+        RouteScreen.question.name: (context) => QuestionScreen()
       },
     );
   }
