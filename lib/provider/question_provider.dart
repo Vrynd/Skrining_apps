@@ -12,11 +12,21 @@ class QuestionProvider extends ChangeNotifier {
   int get currentIndex => _currentIndex;
   List<dynamic> allAnswer = [];
 
-  QuestionProvider(this._service) {
-    loadQuestions();
-  }
+  List<Question> get questions => 
+      (_state is QuestionLoaded) ? (_state as QuestionLoaded).questions : [];
+  
+  Question? get currentQuestion => 
+      questions.isNotEmpty ? questions[_currentIndex] : null;
+
+  double get progress => 
+      questions.isEmpty ? 0.0 : (_currentIndex + 1) / questions.length;
+
+  dynamic get currentAnswerValue => allAnswer[currentIndex];
+
+  QuestionProvider(this._service);
 
   Future<void> loadQuestions() async {
+    resetQuestion();
     _state = QuestionLoading();
     notifyListeners();
 
@@ -31,16 +41,13 @@ class QuestionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Question> get questions => 
-      (_state is QuestionLoaded) ? (_state as QuestionLoaded).questions : [];
-  
-  Question? get currentQuestion => 
-      questions.isNotEmpty ? questions[_currentIndex] : null;
-
-  double get progress => 
-      questions.isEmpty ? 0.0 : (_currentIndex + 1) / questions.length;
-
-  dynamic get currentAnswerValue => allAnswer[currentIndex];
+  void resetQuestion() {
+    _currentIndex = 0;
+    allAnswer = List.empty(growable: true);
+    _state = QuestionInitial();
+    questions.clear();
+    notifyListeners(); 
+  }
 
   void saveAnswer(dynamic value) {
     if (currentQuestion != null) {

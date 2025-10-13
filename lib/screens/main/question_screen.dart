@@ -6,10 +6,21 @@ import 'package:skrining_apps/state/question_state.dart';
 import 'package:skrining_apps/components/widget/option_answer_widget.dart';
 import 'package:skrining_apps/components/widget/text_answer_widget.dart';
 
-const Key _questionWidgetKey = Key('question_widget_key');
-
-class QuestionScreen extends StatelessWidget {
+class QuestionScreen extends StatefulWidget {
   const QuestionScreen({super.key});
+
+  @override
+  State<QuestionScreen> createState() => _QuestionScreenState();
+}
+
+class _QuestionScreenState extends State<QuestionScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() async {
+      await context.read<QuestionProvider>().loadQuestions();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +69,7 @@ class QuestionScreen extends StatelessWidget {
           children: [
             const SizedBox(height: 16),
             Expanded(
-                child: _getQuestionWidget(currentQuestion, provider, key: _questionWidgetKey),
+                child: _getQuestionWidget(currentQuestion, provider, key: ValueKey(provider.currentIndex)),
             ),
             Row(
               children: [
@@ -77,6 +88,8 @@ class QuestionScreen extends StatelessWidget {
                       if (isLastQuestion) {
                         final results = provider.collectResults();
                         debugPrint("Hasil Result = $results");
+                        // provider.resetQuestion();
+                        Navigator.of(context).pop();
                         // _goToResultPage(context, results);
                       } else {
                         provider.nextQuestion();
