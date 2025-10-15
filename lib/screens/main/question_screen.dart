@@ -28,10 +28,19 @@ class _QuestionScreenState extends State<QuestionScreen> {
       builder: (context, provider, child) {
         final state = provider.state;
         return switch (state) {
-          QuestionLoading() => const Center(child: CircularProgressIndicator()),
-          QuestionError(message: final msg) => Center(child: Text('Error: $msg')),
+          QuestionLoading() => Scaffold(
+            appBar: AppBar(title: Text("Kuesioner")),
+            body: const Center(child: CircularProgressIndicator())
+          ),
+          QuestionError(message: final msg) => Scaffold(
+            appBar: AppBar(title: Text("Kuesioner")),
+            body: Center(child: Text('Error: $msg'))
+          ),
           QuestionLoaded(questions: final questions) => _buildQuestionUI(context, provider),
-          _ => SizedBox(),
+          _ => Scaffold(
+            appBar: AppBar(title: Text("Kuesioner")),
+            body: SizedBox(),
+          ),
         };
       },
     );
