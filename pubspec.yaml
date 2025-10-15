@@ -32,3 +32,4 @@ flutter:
   assets:
     - assets/images/heart-rate.png
     - assets/images/user.png
+    - assets/question.json

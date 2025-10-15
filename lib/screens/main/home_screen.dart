@@ -8,6 +8,7 @@ import 'package:skrining_apps/components/widget/section_title.dart';
 import 'package:skrining_apps/components/widget/user_greeting.dart';
 import 'package:skrining_apps/components/widget/user_notification.dart';
 import 'package:skrining_apps/provider/firebase_auth_provider.dart';
+import 'package:skrining_apps/screens/routes/route_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -73,7 +74,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: 'Yuk, Cek Kesehatanmu',
                       subtitle: 'Mulai skrining kesehatanmu\nsekarang juga',
                       buttonText: 'Mulai Periksa',
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, RouteScreen.question.name);
+                      },
                     ),
                     Positioned(
                       right: 20,

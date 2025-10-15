@@ -1,0 +1,151 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "question": "Berapa usia Anda saat ini?",
+      "answer_type": "text",
+      "keyboard_type": "number",
+      "required": true
+    },
+    {
+      "id": 2,
+      "question": "Apa jenis kelamin Anda?",
+      "answer_type": "option",
+      "required": true,
+      "options": [
+        {
+          "text": "Laki-Laki",
+          "value": 1
+        },
+        {
+          "text": "Perempuan",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Bagaimana Anda menggambarkan jenis nyeri dada yang Anda pernah rasakan sebelumnya?",
+      "answer_type": "option",
+      "required": true,
+      "options": [
+        {
+          "text": "Nyeri dada terjadi saat Anda beraktivitas dan hilang setelah beristirahat",
+          "value": 0
+        },
+        {
+          "text": "Nyeri dada Anda datang dalam situasi yang tidak biasa dan kadang terasa lebih ringan atau lebih lama dibandingkan dengan nyeri dada biasanya",
+          "value": 1
+        },
+        {
+          "text": "Nyeri dada Anda terasa tajam, datang secara tiba-tiba, atau berkaitan dengan pergerakan tubuh, dan tidak hilang dengan istirahat",
+          "value": 2
+        },
+        {
+          "text": "Anda tidak merasakan gejala nyeri dada sama sekali",
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "Berapa tekanan darah Anda saat istirahat atau dalam kondisi tenang (misalnya, setelah beberapa menit duduk santai)?",
+      "answer_type": "text",
+      "keyboard_type": "number",
+      "required": true
+    },
+    {
+      "id": 5,
+      "question": "Berapa kadar kolesterol total dalam darah Anda?",
+      "answer_type": "text",
+      "keyboard_type": "number",
+      "required": true
+    },
+    {
+      "id": 6,
+      "question": "Apakah kadar gula darah Anda lebih dari 120 mg/dL setelah berpuasa selama 8 jam?",
+      "answer_type": "option",
+      "required": true,
+      "options": [
+        {
+          "text": "Ya",
+          "value": 1
+        },
+        {
+          "text": "Tidak",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Bagaimana hasil pemeriksaan elektrokardiogram (EKG) saat Anda dalam kondisi istirahat?",
+      "answer_type": "option",
+      "required": true,
+      "options": [
+        {
+          "text": "Hasil EKG menunjukkan bahwa aktivitas jantung Anda normal (tidak ada kelainan atau gangguan pada jantung Anda saat beristirahat)",
+          "value": 0
+        },
+        {
+          "text": "Hasil EKG menunjukkan adanya perubahan pada gelombang ST atau T, yang mungkin menunjukkan gangguan pada aliran darah ke jantung (misalnya, penyakit arteri koroner)",
+          "value": 1
+        },
+        {
+          "text": "Hasil EKG menunjukkan tanda-tanda pembesaran pada ventrikel kiri jantung, yang bisa terkait dengan tekanan darah tinggi atau kondisi lainnya yang membuat jantung bekerja lebih keras",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Berapa detak jantung maksimal yang Anda capai selama aktivitas fisik atau tes beban?",
+      "answer_type": "text",
+      "keyboard_type": "number",
+      "required": true
+    },
+    {
+      "id": 9,
+      "question": "Apakah Anda mengalami nyeri dada atau rasa tidak nyaman di dada saat berolahraga atau melakukan aktivitas fisik?",
+      "answer_type": "option",
+      "required": true,
+      "options": [
+        {
+          "text": "Ya",
+          "value": 1
+        },
+        {
+          "text": "Tidak",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "question": "Selama tes jantung, berapa banyak penurunan yang terlihat pada grafik jantung (segmen ST) ketika Anda berolahraga atau melakukan aktivitas fisik?",
+      "answer_type": "text",
+      "keyboard_type": "number",
+      "required": true
+    },
+    {
+      "id": 11,
+      "question": "Selama tes jantung, bagaimana bentuk grafik yang menunjukkan aktivitas jantung Anda setelah berolahraga?",
+      "answer_type": "option",
+      "required": true,
+      "options": [
+        {
+          "text": "Grafik menunjukkan kenaikan yang normal setelah berolahraga",
+          "value": 0
+        },
+        {
+          "text": "Grafik tetap lurus tanpa perubahan setelah berolahraga",
+          "value": 1
+        },
+        {
+          "text": "Grafik menunjukkan penurunan setelah berolahraga",
+          "value": 2
+        }
+      ]
+    }
+  ]
+}
