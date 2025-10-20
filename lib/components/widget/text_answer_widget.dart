@@ -39,7 +39,7 @@ class _TextAnswerWidgetState extends State<TextAnswerWidget> {
           keyboardType: widget.question.keyboardType == 'number' ? TextInputType.number : TextInputType.text,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
-            hintText: 'Jawab di sini...',
+            hintText: widget.question.hintText,
           ),
           onSubmitted: widget.onAnswer,
         ),

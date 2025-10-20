@@ -3,6 +3,7 @@ import 'package:skrining_apps/models/option.dart';
 class Question {
     int id;
     String question;
+    String? hintText;
     AnswerType answerType;
     String? keyboardType;
     bool required;
@@ -11,6 +12,7 @@ class Question {
     Question({
         required this.id,
         required this.question,
+        this.hintText,
         required this.answerType,
         this.keyboardType,
         required this.required,
@@ -20,6 +22,7 @@ class Question {
     factory Question.fromJson(Map<String, dynamic> json) => Question(
         id: json["id"],
         question: json["question"],
+        hintText: json["hint"],
         answerType: answerTypeValues.map[json["answer_type"]]!,
         keyboardType: json["keyboard_type"],
         required: json["required"],
@@ -29,6 +32,7 @@ class Question {
     Map<String, dynamic> toJson() => {
         "id": id,
         "question": question,
+        "hint": hintText,
         "answer_type": answerTypeValues.reverse[answerType],
         "keyboard_type": keyboardType,
         "required": required,

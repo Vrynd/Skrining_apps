@@ -3,6 +3,7 @@
     {
       "id": 1,
       "question": "Berapa usia Anda saat ini?",
+      "hint": "Usia Anda...",
       "answer_type": "text",
       "keyboard_type": "number",
       "required": true
@@ -50,6 +51,7 @@
     {
       "id": 4,
       "question": "Berapa tekanan darah Anda saat istirahat atau dalam kondisi tenang (misalnya, setelah beberapa menit duduk santai)?",
+      "hint": "Masukkan angka Sistolik (angka pertama), contoh: 120",
       "answer_type": "text",
       "keyboard_type": "number",
       "required": true
@@ -57,6 +59,7 @@
     {
       "id": 5,
       "question": "Berapa kadar kolesterol total dalam darah Anda?",
+      "hint": "Masukkan total kolesterol darah (mg/dL), contoh: 195 ",
       "answer_type": "text",
       "keyboard_type": "number",
       "required": true
@@ -100,6 +103,7 @@
     {
       "id": 8,
       "question": "Berapa detak jantung maksimal yang Anda capai selama aktivitas fisik atau tes beban?",
+      "hint": "Masukkan detak jantung maksimal (bpm), contoh: 185",
       "answer_type": "text",
       "keyboard_type": "number",
       "required": true
@@ -123,6 +127,7 @@
     {
       "id": 10,
       "question": "Selama tes jantung, berapa banyak penurunan yang terlihat pada grafik jantung (segmen ST) ketika Anda berolahraga atau melakukan aktivitas fisik?",
+      "hint": "Angka (Oldpeak, satuan mm) pada laporan EKG/stress test Anda, Contoh: 2.3",
       "answer_type": "text",
       "keyboard_type": "number",
       "required": true
