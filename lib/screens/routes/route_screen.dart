@@ -5,7 +5,8 @@ enum RouteScreen {
   profile('profile'),
   changePassword('change_password'),
   forgotPassword('forgot_password'),
-  question('question');
+  question('question'),
+  result('result');
 
   final String name;
   const RouteScreen(this.name);
