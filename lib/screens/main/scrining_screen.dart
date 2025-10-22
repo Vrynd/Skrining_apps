@@ -9,7 +9,9 @@ import 'package:skrining_apps/components/widget/section_title.dart';
 import 'package:skrining_apps/components/widget/tile_card.dart';
 import 'package:skrining_apps/components/widget/tile_section.dart';
 import 'package:skrining_apps/models/medical_terms.dart';
+import 'package:skrining_apps/provider/result_provider.dart';
 import 'package:skrining_apps/provider/time_provider.dart';
+import 'package:skrining_apps/screens/routes/route_screen.dart';
 
 class ScriningScreen extends StatefulWidget {
   const ScriningScreen({super.key});
@@ -19,6 +21,7 @@ class ScriningScreen extends StatefulWidget {
 }
 
 class _ScriningScreenState extends State<ScriningScreen> {
+  final ScrollController _scrollController = ScrollController();
   final _ageController = TextEditingController();
   final _bloodController = TextEditingController();
   final _cholesterolControlller = TextEditingController();
@@ -39,6 +42,7 @@ class _ScriningScreenState extends State<ScriningScreen> {
       backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
       body: SafeArea(
         child: ListView(
+          controller: _scrollController,
           padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
           children: [
             Column(
@@ -85,13 +89,45 @@ class _ScriningScreenState extends State<ScriningScreen> {
                         );
                       },
                     ),
-                    TileCard(
-                      icon: Icons.assignment_turned_in_outlined,
-                      lightColor: Colors.green,
-                      darkColor: Colors.green.shade200,
-                      title: "Hasil Skrining",
-                      isTitleBold: true,
-                      onTap: () {},
+                    Consumer<ResultProvider>(
+                      builder: (context, resultProvider, child) {
+                        return Stack(
+                          children: [
+                            TileCard(
+                              icon: Icons.assignment_turned_in_outlined,
+                              lightColor: Colors.green,
+                              darkColor: Colors.green.shade200,
+                              title: "Hasil Skrining",
+                              isTitleBold: true,
+                              onTap: () {
+                                resultProvider
+                                    .clearNotification();
+                                _gotoResult();
+                              },
+                            ),
+                            if (resultProvider.notificationCount > 0)
+                              Positioned(
+                                right: 45,
+                                top: 15,
+                                child: Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Text(
+                                    '${resultProvider.notificationCount}',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -241,13 +277,28 @@ class _ScriningScreenState extends State<ScriningScreen> {
                   },
                 ),
                 SizedBox(height: 16),
-                ClickButton(onPressed: () {}, textAction: 'Mulai Skrining'),
+                ClickButton(
+                  onPressed: () {
+                    context.read<ResultProvider>().addNotification();
+
+                    _scrollController.animateTo(
+                      0,
+                      duration: const Duration(milliseconds: 600),
+                      curve: Curves.easeOut,
+                    );
+                  },
+                  textAction: 'Mulai Skrining',
+                ),
               ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _gotoResult() {
+    Navigator.pushNamed(context, RouteScreen.result.name);
   }
 
   @override
@@ -257,6 +308,7 @@ class _ScriningScreenState extends State<ScriningScreen> {
     _cholesterolControlller.dispose();
     _heartController.dispose();
     _depressionController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 }

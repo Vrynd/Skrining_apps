@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:skrining_apps/models/question.dart';
 import 'package:skrining_apps/provider/question_provider.dart';
+import 'package:skrining_apps/screens/routes/route_screen.dart';
 import 'package:skrining_apps/state/question_state.dart';
 import 'package:skrining_apps/components/widget/option_answer_widget.dart';
 import 'package:skrining_apps/components/widget/text_answer_widget.dart';
@@ -98,7 +99,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
                         final results = provider.collectResults();
                         debugPrint("Hasil Result = $results");
                         // provider.resetQuestion();
-                        Navigator.of(context).pop();
+                        Navigator.pushNamed(context, RouteScreen.result.name);
                         // _goToResultPage(context, results);
                       } else {
                         provider.nextQuestion();
