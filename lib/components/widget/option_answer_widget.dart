@@ -27,9 +27,9 @@ class OptionAnswerWidget extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 12.0),
             child: InkWell(
               onTap: (){
-                onAnswer(option.value);
-                print("Pertanyaan : ${question.question}");
-                print("Jawaban yg Dipilih : ${option.value}");
+                onAnswer("${option.alias}_${option.value}");
+                debugPrint("Pertanyaan : ${question.question}");
+                debugPrint("Jawaban yg Dipilih : ${option.alias}_${option.value}");
               },
               borderRadius: BorderRadius.circular(10),
               child: Container(

@@ -11,6 +11,7 @@ class QuestionProvider extends ChangeNotifier {
   int _currentIndex = 0;
   int get currentIndex => _currentIndex;
   List<dynamic> allAnswer = [];
+  List<dynamic> skriningData = [];
 
   List<Question> get questions => 
       (_state is QuestionLoaded) ? (_state as QuestionLoaded).questions : [];
@@ -35,6 +36,7 @@ class QuestionProvider extends ChangeNotifier {
       _state = QuestionLoaded(questions);
       debugPrint("Berapa banyak pertanyaan = ${questions.length}");
       allAnswer = List.filled(questions.length, null);
+      skriningData = List.filled(questions.length, null);
     } catch (e) {
       _state = QuestionError(e.toString());
     }
@@ -44,6 +46,7 @@ class QuestionProvider extends ChangeNotifier {
   void resetQuestion() {
     _currentIndex = 0;
     allAnswer = List.empty(growable: true);
+    skriningData = List.empty(growable: true);
     _state = QuestionInitial();
     questions.clear();
     notifyListeners(); 
@@ -51,7 +54,14 @@ class QuestionProvider extends ChangeNotifier {
 
   void saveAnswer(dynamic value) {
     if (currentQuestion != null) {
-      allAnswer[currentIndex] = value;
+      if(value.toString().contains('_')) {
+        List<String> data = value.toString().split('_');
+        allAnswer[currentIndex] = int.parse(data[1]);
+        skriningData[currentIndex] = data[0];
+      } else {
+        allAnswer[currentIndex] = value;
+        skriningData[currentIndex] = value;
+      }
       notifyListeners();
     }
   }
@@ -69,7 +79,6 @@ class QuestionProvider extends ChangeNotifier {
       notifyListeners();
       return true;
     } else {
-      // Code disini u/ submitnya
       return false;
     }
   }
@@ -80,12 +89,15 @@ class QuestionProvider extends ChangeNotifier {
       notifyListeners();
       return true;
     } else {
-      // Code disini u/ back ke Home
       return false;
     }
   }
 
   List<dynamic> collectResults(){
     return allAnswer;
+  }
+
+  List<dynamic> collectSkriningData(){
+    return skriningData;
   }
 }

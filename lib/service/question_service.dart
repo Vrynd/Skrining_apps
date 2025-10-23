@@ -13,7 +13,6 @@ class QuestionService {
       final questionsResponse = QuestionsResponse.fromJson(jsonMap);
       return questionsResponse.questions;
     } catch (e) {
-      print("Error loading questions: $e");
       throw Exception("Gagal memuat data pertanyaan. Error: $e");
     }
   }

@@ -16,10 +16,12 @@
       "options": [
         {
           "text": "Laki-Laki",
+          "alias": "M",
           "value": 1
         },
         {
           "text": "Perempuan",
+          "alias": "F",
           "value": 0
         }
       ]
@@ -32,18 +34,22 @@
       "options": [
         {
           "text": "Nyeri dada terjadi saat Anda beraktivitas dan hilang setelah beristirahat",
+          "alias": "TA",
           "value": 0
         },
         {
           "text": "Nyeri dada Anda datang dalam situasi yang tidak biasa dan kadang terasa lebih ringan atau lebih lama dibandingkan dengan nyeri dada biasanya",
+          "alias": "ATA",
           "value": 1
         },
         {
           "text": "Nyeri dada Anda terasa tajam, datang secara tiba-tiba, atau berkaitan dengan pergerakan tubuh, dan tidak hilang dengan istirahat",
+          "alias": "NAP",
           "value": 2
         },
         {
           "text": "Anda tidak merasakan gejala nyeri dada sama sekali",
+          "alias": "ASY",
           "value": 3
         }
       ]
@@ -51,7 +57,7 @@
     {
       "id": 4,
       "question": "Berapa tekanan darah Anda saat istirahat atau dalam kondisi tenang (misalnya, setelah beberapa menit duduk santai)?",
-      "hint": "Masukkan angka Sistolik (angka pertama), contoh: 120",
+      "hint": "Masukkan angka Sistolik (angka pertama)",
       "answer_type": "text",
       "keyboard_type": "number",
       "required": true
@@ -59,7 +65,7 @@
     {
       "id": 5,
       "question": "Berapa kadar kolesterol total dalam darah Anda?",
-      "hint": "Masukkan total kolesterol darah (mg/dL), contoh: 195 ",
+      "hint": "Masukkan total kolesterol darah (mg/dL) ",
       "answer_type": "text",
       "keyboard_type": "number",
       "required": true
@@ -72,10 +78,12 @@
       "options": [
         {
           "text": "Ya",
+          "alias": "Ya",
           "value": 1
         },
         {
           "text": "Tidak",
+          "alias": "Tidak",
           "value": 0
         }
       ]
@@ -88,14 +96,17 @@
       "options": [
         {
           "text": "Hasil EKG menunjukkan bahwa aktivitas jantung Anda normal (tidak ada kelainan atau gangguan pada jantung Anda saat beristirahat)",
+          "alias": "Normal",
           "value": 0
         },
         {
           "text": "Hasil EKG menunjukkan adanya perubahan pada gelombang ST atau T, yang mungkin menunjukkan gangguan pada aliran darah ke jantung (misalnya, penyakit arteri koroner)",
+          "alias": "ST",
           "value": 1
         },
         {
           "text": "Hasil EKG menunjukkan tanda-tanda pembesaran pada ventrikel kiri jantung, yang bisa terkait dengan tekanan darah tinggi atau kondisi lainnya yang membuat jantung bekerja lebih keras",
+          "alias": "LVH",
           "value": 2
         }
       ]
@@ -103,7 +114,7 @@
     {
       "id": 8,
       "question": "Berapa detak jantung maksimal yang Anda capai selama aktivitas fisik atau tes beban?",
-      "hint": "Masukkan detak jantung maksimal (bpm), contoh: 185",
+      "hint": "Masukkan detak jantung maksimal (bpm)",
       "answer_type": "text",
       "keyboard_type": "number",
       "required": true
@@ -116,10 +127,12 @@
       "options": [
         {
           "text": "Ya",
+          "alias": "Ya",
           "value": 1
         },
         {
           "text": "Tidak",
+          "alias": "Tidak",
           "value": 0
         }
       ]
@@ -127,7 +140,7 @@
     {
       "id": 10,
       "question": "Selama tes jantung, berapa banyak penurunan yang terlihat pada grafik jantung (segmen ST) ketika Anda berolahraga atau melakukan aktivitas fisik?",
-      "hint": "Angka (Oldpeak, satuan mm) pada laporan EKG/stress test Anda, Contoh: 2.3",
+      "hint": "Angka Oldpeak (mm) pada laporan EKG/stress test",
       "answer_type": "text",
       "keyboard_type": "number",
       "required": true
@@ -140,14 +153,17 @@
       "options": [
         {
           "text": "Grafik menunjukkan kenaikan yang normal setelah berolahraga",
+          "alias": "Up",
           "value": 0
         },
         {
           "text": "Grafik tetap lurus tanpa perubahan setelah berolahraga",
+          "alias": "Flat",
           "value": 1
         },
         {
           "text": "Grafik menunjukkan penurunan setelah berolahraga",
+          "alias": "Down",
           "value": 2
         }
       ]

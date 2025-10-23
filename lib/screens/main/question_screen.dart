@@ -86,7 +86,10 @@ class _QuestionScreenState extends State<QuestionScreen> {
                 Expanded(
                   child: OutlinedButton(
                     onPressed: isFirstQuestion
-                        ? () => Navigator.of(context).pop()
+                        ? () {
+                          provider.resetQuestion();
+                          Navigator.of(context).pop();
+                        }
                         : () => provider.previousQuestion(),
                     child: Text(isFirstQuestion ? 'Cancel' : 'Back'),
                   ),
@@ -98,7 +101,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
                       if (isLastQuestion) {
                         final results = provider.collectResults();
                         debugPrint("Hasil Result = $results");
-                        // provider.resetQuestion();
+                        final viewData = provider.collectSkriningData();
+                        debugPrint("Hasil Skrining yang Ditampilkan = $viewData");
+                        // Navigator.of(context).pop();
                         Navigator.pushNamed(context, RouteScreen.result.name);
                         // _goToResultPage(context, results);
                       } else {
