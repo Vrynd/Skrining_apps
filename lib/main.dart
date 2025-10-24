@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skrining_apps/firebase_options.dart';
 import 'package:skrining_apps/provider/bottom_navbar_provider.dart';
 import 'package:skrining_apps/provider/firebase_auth_provider.dart';
+import 'package:skrining_apps/provider/generate_tips_provider.dart';
 import 'package:skrining_apps/provider/prediction_provider.dart';
 import 'package:skrining_apps/provider/question_provider.dart';
 import 'package:skrining_apps/provider/result_provider.dart';
@@ -26,6 +27,7 @@ import 'package:skrining_apps/service/api_service.dart';
 import 'package:skrining_apps/service/firebase_auth_service.dart';
 import 'package:skrining_apps/service/question_service.dart';
 import 'package:skrining_apps/service/shared_preferences_service.dart';
+import 'package:skrining_apps/service/tips_service.dart';
 import 'package:skrining_apps/themes/theme_apps.dart';
 
 void main() async {
@@ -69,6 +71,9 @@ void main() async {
         Provider<ApiServices>(create: (context) => ApiServices()),
         ChangeNotifierProvider(
           create: (context) => PredictionProvider(context.read<ApiServices>())),
+        Provider<TipsService>(create: (context) => TipsService()),
+        ChangeNotifierProvider(
+          create: (context) => GenerateTipsProvider(context.read<TipsService>())),
         ChangeNotifierProvider(create: (context) => ResultProvider()),
       ],
       child: const MyApp(),

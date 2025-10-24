@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:skrining_apps/components/widget/scaffold_widget.dart';
+import 'package:skrining_apps/models/tips_response.dart';
+import 'package:skrining_apps/provider/generate_tips_provider.dart';
 import 'package:skrining_apps/provider/prediction_provider.dart';
 import 'package:skrining_apps/screens/routes/route_screen.dart';
 import 'package:skrining_apps/state/prediction_result_state.dart';
@@ -20,13 +22,15 @@ class _ResultScreenState extends State<ResultScreen> {
     super.initState();
     Future.microtask(() async {
       await context.read<PredictionProvider>().fetchPrediction(widget.inputData);
+      await context.read<GenerateTipsProvider>().generateAnswer(widget.data);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final isApiLoading = context.watch<PredictionProvider>().resultState;
-    if (isApiLoading is PredictionLoadingState) {
+    final isGenerateTipsLoading = context.watch<GenerateTipsProvider>().isLoading;
+    if (isApiLoading is PredictionLoadingState || isGenerateTipsLoading == true) {
       return ScaffoldWigdet(
         appBar: AppBar(
           title: Text('Hasil'),
@@ -65,6 +69,9 @@ class _ResultScreenState extends State<ResultScreen> {
   }
 
   Widget buildUI(BuildContext context) {
+    final viewData = context.read<GenerateTipsProvider>().answer;
+    // late TipsResponse viewData;
+
     return ScaffoldWigdet(
       appBar: AppBar(
         title: Text('Hasil'),
@@ -105,6 +112,15 @@ class _ResultScreenState extends State<ResultScreen> {
                   ),
                   ListTile(
                     dense: true,
+                    title: Text('Tipe nyeri dada'),
+                    trailing: Text(widget.data[2]),
+                  ),
+                  Divider(
+                    height: 0,
+                    color: Theme.of(context).colorScheme.outlineVariant,
+                  ),
+                  ListTile(
+                    dense: true,
                     title: Text('Tekanan Darah'),
                     trailing: Text(widget.data[3]),
                   ),
@@ -117,80 +133,14 @@ class _ResultScreenState extends State<ResultScreen> {
                     title: Text('Kadar Kolestrol'),
                     trailing: Text(widget.data[4]),
                   ),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainerLowest,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.outlineVariant,
-                ),
-              ),
-              child: Column(
-                children: [
+                  Divider(
+                    height: 0,
+                    color: Theme.of(context).colorScheme.outlineVariant,
+                  ),
                   ListTile(
                     dense: true,
                     title: Text('Gula Darah > 120'),
                     trailing: Text(widget.data[5]),
-                  ),
-                  Divider(
-                    height: 0,
-                    color: Theme.of(context).colorScheme.outlineVariant,
-                  ),
-                  // ListTile(
-                  //   dense: true,
-                  //   title: Text('Apakah Memiliki Penyakit Jantung?'),
-                  //   trailing: Text('Ya/Tidak'),
-                  // ),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainerLowest,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.outlineVariant,
-                ),
-              ),
-              child: Column(
-                children: [
-                  ListTile(
-                    dense: true,
-                    title: Text('Berapa detak jantung anda'),
-                    trailing: Text(widget.data[7]),
-                  ),
-                  Divider(
-                    height: 0,
-                    color: Theme.of(context).colorScheme.outlineVariant,
-                  ),
-                  ListTile(
-                    dense: true,
-                    title: Text('Berapa nilai depresi'),
-                    trailing: Text(widget.data[9]),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainerLowest,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.outlineVariant,
-                ),
-              ),
-              child: Column(
-                children: [
-                  ListTile(
-                    dense: true,
-                    title: Text('Tipe nyeri dada'),
-                    trailing: Text(widget.data[2]),
                   ),
                   Divider(
                     height: 0,
@@ -207,8 +157,26 @@ class _ResultScreenState extends State<ResultScreen> {
                   ),
                   ListTile(
                     dense: true,
+                    title: Text('Berapa detak jantung anda'),
+                    trailing: Text(widget.data[7]),
+                  ),
+                  Divider(
+                    height: 0,
+                    color: Theme.of(context).colorScheme.outlineVariant,
+                  ),
+                  ListTile(
+                    dense: true,
                     title: Text('Nyeri dada saat beroalahraga'),
                     trailing: Text(widget.data[8]),
+                  ),
+                  Divider(
+                    height: 0,
+                    color: Theme.of(context).colorScheme.outlineVariant,
+                  ),
+                  ListTile(
+                    dense: true,
+                    title: Text('Berapa nilai depresi'),
+                    trailing: Text(widget.data[9]),
                   ),
                   Divider(
                     height: 0,
@@ -219,6 +187,36 @@ class _ResultScreenState extends State<ResultScreen> {
                     title: Text('Pola Kemiringan saat berolahraga'),
                     trailing: Text(widget.data[10]),
                   ),
+                ],
+              ),
+            ),
+            SizedBox(height: 16),
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceContainerLowest,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
+              ),
+              child: Column(
+                children: [
+                  // ListTile(
+                  //   dense: true,
+                  //   title: Text('Apakah Memiliki Penyakit Jantung?'),
+                  //   trailing: Text('Ya/Tidak'),
+                  // ),
+                  Text(viewData!.tips.age),
+                  Text(viewData.tips.sex),
+                  Text(viewData.tips.chestPainType),
+                  Text(viewData.tips.cholesterol),
+                  Text(viewData.tips.fastingBs),
+                  Text(viewData.tips.restingEcg),
+                  Text(viewData.tips.maxHr),
+                  Text(viewData.tips.exerciseAngina),
+                  Text(viewData.tips.oldpeak),
+                  Text(viewData.tips.stSlope),
+                  Text(viewData.tips.summary),
                 ],
               ),
             ),
