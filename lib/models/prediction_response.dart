@@ -1,23 +1,23 @@
 class PredictionResponse {
-  String data;
-  bool error;
-  String message;
+  int? prediction;
+  double? probability;
+  String? message;
 
   PredictionResponse({
-    required this.data,
-    required this.error,
-    required this.message,
+    this.prediction,
+    this.probability,
+    this.message,
   });
 
   factory PredictionResponse.fromJson(Map<String, dynamic> json) => PredictionResponse(
-      data: json['data'] as String,
-      error: json["error"],
-      message: json["message"],
+      prediction: json['prediction'] as int?,
+      probability: json['probability'] as double?,
+      message: json["error"] as String?,
   );
 
   Map<String, dynamic> toJson() => {
-      "error": error,
-      "message": message,
-      "data": data,
+      "prediction": prediction,
+      "probability": probability,
+      "error": message,
   };
 }

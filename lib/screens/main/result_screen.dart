@@ -1,12 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:skrining_apps/components/widget/scaffold_widget.dart';
+import 'package:skrining_apps/provider/prediction_provider.dart';
 import 'package:skrining_apps/screens/routes/route_screen.dart';
+import 'package:skrining_apps/state/prediction_result_state.dart';
 
-class ResultScreen extends StatelessWidget {
-  const ResultScreen({super.key});
+class ResultScreen extends StatefulWidget {
+  final List<dynamic> inputData;
+  final List<dynamic> data;
+  const ResultScreen({super.key,required this.inputData,required this.data});
+
+  @override
+  State<ResultScreen> createState() => _ResultScreenState();
+}
+
+class _ResultScreenState extends State<ResultScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() async {
+      await context.read<PredictionProvider>().fetchPrediction(widget.inputData);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final isApiLoading = context.watch<PredictionProvider>().resultState;
+    if (isApiLoading is PredictionLoadingState) {
+      return ScaffoldWigdet(
+        appBar: AppBar(
+          title: Text('Hasil'),
+          backgroundColor: Colors.blue,
+          foregroundColor: Colors.white,
+        ),
+        body: SafeArea(
+          child: Center(child: CircularProgressIndicator()),
+        ),
+      );
+      
+    }else if(isApiLoading is PredictionLoadedState){
+      return buildUI(context);
+    }else if (isApiLoading is PredictionErrorState){
+      String message = isApiLoading.error;
+      return ScaffoldWigdet(
+        appBar: AppBar(
+          title: Text('Hasil'),
+          backgroundColor: Colors.blue,
+          foregroundColor: Colors.white,
+        ),
+        body: SafeArea(
+          child: Center(child: Text(message)),
+        ),
+      );
+    }else{
+      return ScaffoldWigdet(
+        appBar: AppBar(
+          title: Text('Hasil'),
+          backgroundColor: Colors.blue,
+          foregroundColor: Colors.white,
+        ),
+        body: SizedBox(),
+      );
+    }
+  }
+
+  Widget buildUI(BuildContext context) {
     return ScaffoldWigdet(
       appBar: AppBar(
         title: Text('Hasil'),
@@ -30,7 +88,7 @@ class ResultScreen extends StatelessWidget {
                   ListTile(
                     dense: true,
                     title: Text('Usia'),
-                    trailing: Text('23'),
+                    trailing: Text(widget.data[0]),
                   ),
                   Divider(
                     height: 0,
@@ -39,7 +97,7 @@ class ResultScreen extends StatelessWidget {
                   ListTile(
                     dense: true,
                     title: Text('Jenis Kelamin'),
-                    trailing: Text('Laki-Laki'),
+                    trailing: widget.data[1] == 'M' ? Text('Laki-Laki') : Text('Perempuan'),
                   ),
                   Divider(
                     height: 0,
@@ -48,7 +106,7 @@ class ResultScreen extends StatelessWidget {
                   ListTile(
                     dense: true,
                     title: Text('Tekanan Darah'),
-                    trailing: Text('120'),
+                    trailing: Text(widget.data[3]),
                   ),
                   Divider(
                     height: 0,
@@ -57,7 +115,7 @@ class ResultScreen extends StatelessWidget {
                   ListTile(
                     dense: true,
                     title: Text('Kadar Kolestrol'),
-                    trailing: Text('120'),
+                    trailing: Text(widget.data[4]),
                   ),
                 ],
               ),
@@ -76,17 +134,17 @@ class ResultScreen extends StatelessWidget {
                   ListTile(
                     dense: true,
                     title: Text('Gula Darah > 120'),
-                    trailing: Text('Ya/Tidak'),
+                    trailing: Text(widget.data[5]),
                   ),
                   Divider(
                     height: 0,
                     color: Theme.of(context).colorScheme.outlineVariant,
                   ),
-                  ListTile(
-                    dense: true,
-                    title: Text('Apakah Memiliki Penyakit Jantung?'),
-                    trailing: Text('Ya/Tidak'),
-                  ),
+                  // ListTile(
+                  //   dense: true,
+                  //   title: Text('Apakah Memiliki Penyakit Jantung?'),
+                  //   trailing: Text('Ya/Tidak'),
+                  // ),
                 ],
               ),
             ),
@@ -104,7 +162,7 @@ class ResultScreen extends StatelessWidget {
                   ListTile(
                     dense: true,
                     title: Text('Berapa detak jantung anda'),
-                    trailing: Text('180'),
+                    trailing: Text(widget.data[7]),
                   ),
                   Divider(
                     height: 0,
@@ -113,7 +171,7 @@ class ResultScreen extends StatelessWidget {
                   ListTile(
                     dense: true,
                     title: Text('Berapa nilai depresi'),
-                    trailing: Text('100'),
+                    trailing: Text(widget.data[9]),
                   ),
                 ],
               ),
@@ -132,7 +190,7 @@ class ResultScreen extends StatelessWidget {
                   ListTile(
                     dense: true,
                     title: Text('Tipe nyeri dada'),
-                    trailing: Text('Asymptoatic'),
+                    trailing: Text(widget.data[2]),
                   ),
                   Divider(
                     height: 0,
@@ -141,7 +199,7 @@ class ResultScreen extends StatelessWidget {
                   ListTile(
                     dense: true,
                     title: Text('Hasil Elektrokardiagram'),
-                    trailing: Text('Normal'),
+                    trailing: Text(widget.data[6]),
                   ),
                   Divider(
                     height: 0,
@@ -150,7 +208,7 @@ class ResultScreen extends StatelessWidget {
                   ListTile(
                     dense: true,
                     title: Text('Nyeri dada saat beroalahraga'),
-                    trailing: Text('Ya'),
+                    trailing: Text(widget.data[8]),
                   ),
                   Divider(
                     height: 0,
@@ -159,7 +217,7 @@ class ResultScreen extends StatelessWidget {
                   ListTile(
                     dense: true,
                     title: Text('Pola Kemiringan saat berolahraga'),
-                    trailing: Text('Menanjak'),
+                    trailing: Text(widget.data[10]),
                   ),
                 ],
               ),

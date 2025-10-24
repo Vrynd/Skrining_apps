@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skrining_apps/firebase_options.dart';
 import 'package:skrining_apps/provider/bottom_navbar_provider.dart';
 import 'package:skrining_apps/provider/firebase_auth_provider.dart';
+import 'package:skrining_apps/provider/prediction_provider.dart';
 import 'package:skrining_apps/provider/question_provider.dart';
 import 'package:skrining_apps/provider/result_provider.dart';
 import 'package:skrining_apps/provider/shared_prefrences_provider.dart';
@@ -21,6 +22,7 @@ import 'package:skrining_apps/screens/main/navigation_screen.dart';
 import 'package:skrining_apps/screens/main/question_screen.dart';
 import 'package:skrining_apps/screens/main/result_screen.dart';
 import 'package:skrining_apps/screens/routes/route_screen.dart';
+import 'package:skrining_apps/service/api_service.dart';
 import 'package:skrining_apps/service/firebase_auth_service.dart';
 import 'package:skrining_apps/service/question_service.dart';
 import 'package:skrining_apps/service/shared_preferences_service.dart';
@@ -64,7 +66,10 @@ void main() async {
           create: (context) =>
               QuestionProvider(context.read<QuestionService>()),
         ),
-        ChangeNotifierProvider(create: (_) => ResultProvider()),
+        Provider<ApiServices>(create: (context) => ApiServices()),
+        ChangeNotifierProvider(
+          create: (context) => PredictionProvider(context.read<ApiServices>())),
+        ChangeNotifierProvider(create: (context) => ResultProvider()),
       ],
       child: const MyApp(),
     ),
@@ -92,7 +97,15 @@ class MyApp extends StatelessWidget {
         RouteScreen.forgotPassword.name: (context) =>
             const ForgotPasswordScreen(),
         RouteScreen.question.name: (context) => QuestionScreen(),
-        RouteScreen.result.name: (context) => ResultScreen(),
+        RouteScreen.result.name: (context) {
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String,dynamic>? ?? {};
+          final List<dynamic> data1 = args['inputData'];
+          final List<dynamic> data2 = args['data'];
+          return ResultScreen(
+            inputData: data1,
+            data: data2,
+          );
+        },
       },
     );
   }

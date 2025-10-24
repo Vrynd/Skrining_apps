@@ -11,7 +11,8 @@ class PredictionErrorState extends PredictionResultState {
 }
 
 class PredictionLoadedState extends PredictionResultState {
-  final String data;
+  final int dataPrediction;
+  final double dataProbability;
 
-  PredictionLoadedState(this.data);
+  PredictionLoadedState(this.dataPrediction, this.dataProbability);
 }

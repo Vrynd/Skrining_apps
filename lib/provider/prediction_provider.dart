@@ -18,11 +18,11 @@ class PredictionProvider extends ChangeNotifier {
       notifyListeners();
 
       final result = await _apiServices.postPredictionData(inputData: data);
-      if (result.error) {
-        _resultState = PredictionErrorState(result.message);
+      if (result.message != null) {
+        _resultState = PredictionErrorState(result.message!);
         notifyListeners();
       } else {
-        _resultState = PredictionLoadedState(result.data);
+        _resultState = PredictionLoadedState(result.prediction!, result.probability!);
         notifyListeners();
       }
     } on Exception catch (e) {

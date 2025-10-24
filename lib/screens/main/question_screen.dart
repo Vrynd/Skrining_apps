@@ -99,13 +99,18 @@ class _QuestionScreenState extends State<QuestionScreen> {
                   child: OutlinedButton(
                     onPressed: provider.currentAnswerValue != null ? () {
                       if (isLastQuestion) {
+                        // result ini u/ input ke backend
                         final results = provider.collectResults();
                         debugPrint("Hasil Result = $results");
+                        // viewData ini u/ data yg ditampilkan pada halaman hasil prediksi
                         final viewData = provider.collectSkriningData();
                         debugPrint("Hasil Skrining yang Ditampilkan = $viewData");
                         // Navigator.of(context).pop();
-                        Navigator.pushNamed(context, RouteScreen.result.name);
-                        // _goToResultPage(context, results);
+                        // Navigator.pushNamed(context, RouteScreen.result.name);
+                        Navigator.pushReplacementNamed(context, RouteScreen.result.name,arguments: {
+                          'inputData': results,
+                          'data': viewData,
+                        });
                       } else {
                         provider.nextQuestion();
                       }
