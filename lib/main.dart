@@ -13,6 +13,7 @@ import 'package:skrining_apps/provider/question_provider.dart';
 import 'package:skrining_apps/provider/result_provider.dart';
 import 'package:skrining_apps/provider/shared_prefrences_provider.dart';
 import 'package:skrining_apps/provider/show_hide_password_provider.dart';
+import 'package:skrining_apps/provider/static_tips_provider.dart';
 import 'package:skrining_apps/provider/time_provider.dart';
 import 'package:skrining_apps/screens/auth/forgot_password.dart';
 import 'package:skrining_apps/screens/auth/login_screen.dart';
@@ -27,6 +28,7 @@ import 'package:skrining_apps/service/api_service.dart';
 import 'package:skrining_apps/service/firebase_auth_service.dart';
 import 'package:skrining_apps/service/question_service.dart';
 import 'package:skrining_apps/service/shared_preferences_service.dart';
+import 'package:skrining_apps/service/static_tips_service.dart';
 import 'package:skrining_apps/service/tips_service.dart';
 import 'package:skrining_apps/themes/theme_apps.dart';
 
@@ -74,6 +76,9 @@ void main() async {
         Provider<TipsService>(create: (context) => TipsService()),
         ChangeNotifierProvider(
           create: (context) => GenerateTipsProvider(context.read<TipsService>())),
+        Provider<StaticTipsService>(create: (context) => StaticTipsService()),
+        ChangeNotifierProvider(
+          create: (context) => StaticTipsProvider(context.read<StaticTipsService>())),
         ChangeNotifierProvider(create: (context) => ResultProvider()),
       ],
       child: const MyApp(),

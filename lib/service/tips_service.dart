@@ -61,11 +61,13 @@ kemudian akhiri dengan summary singkat (1-3 kalimat) yang merangkum semua saran 
       if (response.text != null) {
         return response.text!;
       } else {
-        throw Exception('gagal melakukan generative ai');
+        throw Exception('tidak ada output dari generative ai');
       }
+    } on GenerativeAIException catch (e) {
+      throw Exception('Kesalahan dari API: ${e.message}');
     } catch (e) {
       print(e.toString());
-      throw Exception('gagal melakukan generative ai');
+      throw Exception('Terjadi kesalahan teknis saat melakukan generative ai');
     }
   }
 }

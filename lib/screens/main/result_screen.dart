@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:skrining_apps/components/widget/scaffold_widget.dart';
+import 'package:skrining_apps/models/static_tips.dart';
 import 'package:skrining_apps/models/tips_response.dart';
 import 'package:skrining_apps/provider/generate_tips_provider.dart';
 import 'package:skrining_apps/provider/prediction_provider.dart';
+import 'package:skrining_apps/provider/static_tips_provider.dart';
 import 'package:skrining_apps/screens/routes/route_screen.dart';
 import 'package:skrining_apps/state/prediction_result_state.dart';
 
@@ -23,6 +25,7 @@ class _ResultScreenState extends State<ResultScreen> {
     Future.microtask(() async {
       await context.read<PredictionProvider>().fetchPrediction(widget.inputData);
       await context.read<GenerateTipsProvider>().generateAnswer(widget.data);
+      await context.read<StaticTipsProvider>().loadStaticTips();
     });
   }
 
@@ -43,7 +46,7 @@ class _ResultScreenState extends State<ResultScreen> {
       );
       
     }else if(isApiLoading is PredictionLoadedState){
-      return buildUI(context);
+      return buildUI(context,isApiLoading.dataPrediction,isApiLoading.dataProbability);
     }else if (isApiLoading is PredictionErrorState){
       String message = isApiLoading.error;
       return ScaffoldWigdet(
@@ -68,9 +71,14 @@ class _ResultScreenState extends State<ResultScreen> {
     }
   }
 
-  Widget buildUI(BuildContext context) {
-    final viewData = context.read<GenerateTipsProvider>().answer;
-    // late TipsResponse viewData;
+  Widget buildUI(BuildContext context, int prediction, double probability) {
+    final viewData = context.read<GenerateTipsProvider>();
+    final staticTips = context.read<StaticTipsProvider>().tipsData;
+    final tempData1 = staticTips[0].bullets;
+    String staticTipsLow = tempData1.join('\n');
+    final tempData2 = staticTips[1].bullets;
+    String staticTipsHigh = tempData2.join('\n');
+    TipsResponse? answerData = viewData.answer;
 
     return ScaffoldWigdet(
       appBar: AppBar(
@@ -199,26 +207,22 @@ class _ResultScreenState extends State<ResultScreen> {
                   color: Theme.of(context).colorScheme.outlineVariant,
                 ),
               ),
-              child: Column(
+              child: answerData != null ?
+              Column(
                 children: [
-                  // ListTile(
-                  //   dense: true,
-                  //   title: Text('Apakah Memiliki Penyakit Jantung?'),
-                  //   trailing: Text('Ya/Tidak'),
-                  // ),
-                  Text(viewData!.tips.age),
-                  Text(viewData.tips.sex),
-                  Text(viewData.tips.chestPainType),
-                  Text(viewData.tips.cholesterol),
-                  Text(viewData.tips.fastingBs),
-                  Text(viewData.tips.restingEcg),
-                  Text(viewData.tips.maxHr),
-                  Text(viewData.tips.exerciseAngina),
-                  Text(viewData.tips.oldpeak),
-                  Text(viewData.tips.stSlope),
-                  Text(viewData.tips.summary),
+                  Text(answerData.tips.age),
+                  Text(answerData.tips.sex),
+                  Text(answerData.tips.chestPainType),
+                  Text(answerData.tips.cholesterol),
+                  Text(answerData.tips.fastingBs),
+                  Text(answerData.tips.restingEcg),
+                  Text(answerData.tips.maxHr),
+                  Text(answerData.tips.exerciseAngina),
+                  Text(answerData.tips.oldpeak),
+                  Text(answerData.tips.stSlope),
+                  Text(answerData.tips.summary),
                 ],
-              ),
+              ) : (prediction == 0) ? Text(staticTipsLow) : Text(staticTipsHigh),
             ),
             SizedBox(height: 24),
             Container(
@@ -239,9 +243,14 @@ class _ResultScreenState extends State<ResultScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        'Rendah',
-                        style: Theme.of(context).textTheme.headlineMedium,
+                      (prediction == 0) ?
+                        Text(
+                          'Tidak',
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        )
+                      : Text(
+                          'Iya',
+                          style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       Icon(
                         Icons.check_circle_outline,

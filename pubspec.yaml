@@ -39,3 +39,4 @@ flutter:
     - assets/images/heart-rate.png
     - assets/images/user.png
     - assets/question.json
+    - assets/static_tips.json
