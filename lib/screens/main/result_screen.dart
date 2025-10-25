@@ -12,7 +12,7 @@ import 'package:skrining_apps/state/prediction_result_state.dart';
 class ResultScreen extends StatefulWidget {
   final List<dynamic> inputData;
   final List<dynamic> data;
-  const ResultScreen({super.key,required this.inputData,required this.data});
+  const ResultScreen({super.key, required this.inputData, required this.data});
 
   @override
   State<ResultScreen> createState() => _ResultScreenState();
@@ -23,7 +23,9 @@ class _ResultScreenState extends State<ResultScreen> {
   void initState() {
     super.initState();
     Future.microtask(() async {
-      await context.read<PredictionProvider>().fetchPrediction(widget.inputData);
+      await context.read<PredictionProvider>().fetchPrediction(
+        widget.inputData,
+      );
       await context.read<GenerateTipsProvider>().generateAnswer(widget.data);
       await context.read<StaticTipsProvider>().loadStaticTips();
     });
@@ -32,22 +34,28 @@ class _ResultScreenState extends State<ResultScreen> {
   @override
   Widget build(BuildContext context) {
     final isApiLoading = context.watch<PredictionProvider>().resultState;
-    final isGenerateTipsLoading = context.watch<GenerateTipsProvider>().isLoading;
-    if (isApiLoading is PredictionLoadingState || isGenerateTipsLoading == true) {
+    final isGenerateTipsLoading = context
+        .watch<GenerateTipsProvider>()
+        .isLoading;
+    final isStaticTipsLoading = context.watch<StaticTipsProvider>().isLoading;
+    if (isApiLoading is PredictionLoadingState ||
+        isGenerateTipsLoading == true ||
+        isStaticTipsLoading == true) {
       return ScaffoldWigdet(
         appBar: AppBar(
           title: Text('Hasil'),
           backgroundColor: Colors.blue,
           foregroundColor: Colors.white,
         ),
-        body: SafeArea(
-          child: Center(child: CircularProgressIndicator()),
-        ),
+        body: SafeArea(child: Center(child: CircularProgressIndicator())),
       );
-      
-    }else if(isApiLoading is PredictionLoadedState){
-      return buildUI(context,isApiLoading.dataPrediction,isApiLoading.dataProbability);
-    }else if (isApiLoading is PredictionErrorState){
+    } else if (isApiLoading is PredictionLoadedState) {
+      return buildUI(
+        context,
+        isApiLoading.dataPrediction,
+        isApiLoading.dataProbability,
+      );
+    } else if (isApiLoading is PredictionErrorState) {
       String message = isApiLoading.error;
       return ScaffoldWigdet(
         appBar: AppBar(
@@ -55,11 +63,9 @@ class _ResultScreenState extends State<ResultScreen> {
           backgroundColor: Colors.blue,
           foregroundColor: Colors.white,
         ),
-        body: SafeArea(
-          child: Center(child: Text(message)),
-        ),
+        body: SafeArea(child: Center(child: Text(message))),
       );
-    }else{
+    } else {
       return ScaffoldWigdet(
         appBar: AppBar(
           title: Text('Hasil'),
@@ -91,6 +97,44 @@ class _ResultScreenState extends State<ResultScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
           children: [
             Container(
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceContainerLowest,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text('Resiko Terkena Penyakit Gagal Jantung?'),
+                  SizedBox(height: 2),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      (prediction == 0)
+                          ? Text(
+                              'Tidak',
+                              style: Theme.of(context).textTheme.headlineMedium,
+                            )
+                          : Text(
+                              'Iya',
+                              style: Theme.of(context).textTheme.headlineMedium,
+                            ),
+                      Icon(
+                        Icons.check_circle_outline,
+                        color: Theme.of(context).colorScheme.primary,
+                        size: 30,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 24),
+            Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surfaceContainerLowest,
                 borderRadius: BorderRadius.circular(16),
@@ -112,7 +156,9 @@ class _ResultScreenState extends State<ResultScreen> {
                   ListTile(
                     dense: true,
                     title: Text('Jenis Kelamin'),
-                    trailing: widget.data[1] == 'M' ? Text('Laki-Laki') : Text('Perempuan'),
+                    trailing: widget.data[1] == 'M'
+                        ? Text('Laki-Laki')
+                        : Text('Perempuan'),
                   ),
                   Divider(
                     height: 0,
@@ -198,35 +244,9 @@ class _ResultScreenState extends State<ResultScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 16),
-            Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainerLowest,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.outlineVariant,
-                ),
-              ),
-              child: answerData != null ?
-              Column(
-                children: [
-                  Text(answerData.tips.age),
-                  Text(answerData.tips.sex),
-                  Text(answerData.tips.chestPainType),
-                  Text(answerData.tips.cholesterol),
-                  Text(answerData.tips.fastingBs),
-                  Text(answerData.tips.restingEcg),
-                  Text(answerData.tips.maxHr),
-                  Text(answerData.tips.exerciseAngina),
-                  Text(answerData.tips.oldpeak),
-                  Text(answerData.tips.stSlope),
-                  Text(answerData.tips.summary),
-                ],
-              ) : (prediction == 0) ? Text(staticTipsLow) : Text(staticTipsHigh),
-            ),
             SizedBox(height: 24),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              padding: EdgeInsets.fromLTRB(16, 4, 8, 4),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surfaceContainerLowest,
                 borderRadius: BorderRadius.circular(16),
@@ -234,44 +254,66 @@ class _ResultScreenState extends State<ResultScreen> {
                   color: Theme.of(context).colorScheme.outlineVariant,
                 ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text('Resiko Terkena Penyakit Gagal Jantung?'),
-                  SizedBox(height: 2),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      (prediction == 0) ?
-                        Text(
-                          'Tidak',
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        )
-                      : Text(
-                          'Iya',
-                          style: Theme.of(context).textTheme.headlineMedium,
-                      ),
-                      Icon(
-                        Icons.check_circle_outline,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 30,
-                      ),
-                    ],
-                  ),
-                ],
+              child: Text(
+                'Tips Untuk Anda',
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
+            ),
+            SizedBox(height: 8),
+            Container(
+              padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceContainerLowest,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
+              ),
+              child: answerData != null
+                  ? Column(
+                      spacing: 10,
+                      children: [
+                        bulletText(answerData.tips.age),
+                        bulletText(answerData.tips.sex),
+                        bulletText(answerData.tips.chestPainType),
+                        bulletText(answerData.tips.cholesterol),
+                        bulletText(answerData.tips.fastingBs),
+                        bulletText(answerData.tips.restingEcg),
+                        bulletText(answerData.tips.maxHr),
+                        bulletText(answerData.tips.exerciseAngina),
+                        bulletText(answerData.tips.oldpeak),
+                        bulletText(answerData.tips.stSlope),
+                        bulletText(answerData.tips.summary),
+                      ],
+                    )
+                  : (prediction == 0)
+                  ? Text(
+                    staticTipsLow,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  )
+                  : Text(
+                    staticTipsHigh,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
             ),
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, RouteScreen.home.name);
+                // Navigator.pushNamed(context, RouteScreen.home.name);
+                Navigator.of(context).pop();
               },
               child: Text('Kembali Ke Beranda'),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget bulletText(String data){
+    return Text(
+      '\u2022 $data',
+      style: Theme.of(context).textTheme.bodyLarge,
     );
   }
 }

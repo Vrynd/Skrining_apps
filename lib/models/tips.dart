@@ -34,7 +34,7 @@ class Tips {
     restingEcg: json["restingECG"],
     maxHr: json["maxHR"],
     exerciseAngina: json["exerciseAngina"],
-    oldpeak: json["oldpeak"]?.toDouble(),
+    oldpeak: json["oldpeak"],
     stSlope: json["ST_Slope"],
     summary: json["summary"],
   );
